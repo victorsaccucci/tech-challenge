@@ -2,7 +2,11 @@ FROM maven:3.9.10-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-COPY . .
+COPY .env .
+
+COPY pom.xml .
+
+COPY src/ src/
 
 RUN mvn clean package -DskipTests
 
@@ -16,4 +20,4 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/app/app.jar"]
