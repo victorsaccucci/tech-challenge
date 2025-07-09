@@ -50,10 +50,12 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid CadastroUsuarioDTO data) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity cadastrarUsuario(@RequestBody @Valid CadastroUsuarioDTO data) {
 
-        if (this.usuarioRepository.findByLogin(data.email()) != null) return ResponseEntity.badRequest().build();
+        if (!this.usuarioRepository.findByEmail(data.email()).isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         String senhaCodificado = new BCryptPasswordEncoder().encode(data.senha());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -73,6 +75,7 @@ public class UsuarioController {
 
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AutenticacaoDTO body){
         Usuario user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
