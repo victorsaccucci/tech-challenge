@@ -11,7 +11,8 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario cadastrarUsuario(Usuario usuario){
+    public Usuario cadastrarUsuario(Usuario usuario, String login, String senha){
         return usuarioRepository.save(usuario);
     }
+
 }
