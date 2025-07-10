@@ -1,4 +1,5 @@
 package com.fiap.techchallenge.dto;
+
 import com.fiap.techchallenge.model.Endereco;
 
 public record CadastroUsuarioDTO(

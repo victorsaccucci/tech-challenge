@@ -1,11 +1,7 @@
 package com.fiap.techchallenge.controller;
 
 import com.fiap.techchallenge.Enum.Tipo;
-import com.fiap.techchallenge.dto.AtualizarUsuarioDTO;
-import com.fiap.techchallenge.dto.AutenticacaoDTO;
-import com.fiap.techchallenge.dto.CadastroUsuarioDTO;
-import com.fiap.techchallenge.dto.LoginRespostaDTO;
-import com.fiap.techchallenge.dto.TrocarSenhaDTO;
+import com.fiap.techchallenge.dto.*;
 import com.fiap.techchallenge.infra.security.TokenService;
 import com.fiap.techchallenge.model.Endereco;
 import com.fiap.techchallenge.model.Usuario;
@@ -13,27 +9,16 @@ import com.fiap.techchallenge.model.UsuarioCargo;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import com.fiap.techchallenge.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -83,9 +68,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AutenticacaoDTO body){
+    public ResponseEntity login(@RequestBody AutenticacaoDTO body) {
         Usuario user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
-        if(passwordEncoder.matches(body.senha(), user.getPassword())) {
+        if (passwordEncoder.matches(body.senha(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok(new LoginRespostaDTO(token));
         }
@@ -102,8 +87,8 @@ public class UsuarioController {
         String novaSenha = senhaDTO.novaSenha();
 
         if (novaSenha == null || novaSenha.isBlank()) {
-        return ResponseEntity.badRequest().body("A nova senha não pode estar vazia.");
-    }
+            return ResponseEntity.badRequest().body("A nova senha não pode estar vazia.");
+        }
         usuarioService.trocarSenha(id, senhaDTO);
         return ResponseEntity.noContent().build();
     }

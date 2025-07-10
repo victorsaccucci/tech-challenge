@@ -2,7 +2,7 @@ package com.fiap.techchallenge.model;
 
 import com.fiap.techchallenge.Enum.Tipo;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +52,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.cargo == UsuarioCargo.ADMIN) {
+        if (this.cargo == UsuarioCargo.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));

@@ -17,11 +17,11 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario cadastrarUsuario(Usuario usuario, String login, String senha){
+    public Usuario cadastrarUsuario(Usuario usuario, String login, String senha) {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario atualizarUsuario(Long id, AtualizarUsuarioDTO atualizarDTO){
+    public Usuario atualizarUsuario(Long id, AtualizarUsuarioDTO atualizarDTO) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow();
 
         usuario.setEmail(atualizarDTO.email());

@@ -12,8 +12,8 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rua ;
-    private String bairro ;
+    private String rua;
+    private String bairro;
     private String cidade;
     private String numero;
     private String estado;

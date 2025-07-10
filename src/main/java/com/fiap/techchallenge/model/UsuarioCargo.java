@@ -6,11 +6,11 @@ public enum UsuarioCargo {
 
     private String cargo;
 
-    UsuarioCargo(String cargo){
+    UsuarioCargo(String cargo) {
         this.cargo = cargo;
     }
 
-    public String getCargo(){
+    public String getCargo() {
         return cargo;
     }
 }
