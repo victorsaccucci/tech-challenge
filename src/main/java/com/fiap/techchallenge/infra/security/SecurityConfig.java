@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/cadastrar").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}/atualizar").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
