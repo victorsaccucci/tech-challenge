@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}/atualizar").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/usuario/{id}/senha").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
