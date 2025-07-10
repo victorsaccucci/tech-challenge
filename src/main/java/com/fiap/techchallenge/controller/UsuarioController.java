@@ -5,6 +5,7 @@ import com.fiap.techchallenge.dto.AtualizarUsuarioDTO;
 import com.fiap.techchallenge.dto.AutenticacaoDTO;
 import com.fiap.techchallenge.dto.CadastroUsuarioDTO;
 import com.fiap.techchallenge.dto.LoginRespostaDTO;
+import com.fiap.techchallenge.dto.TrocarSenhaDTO;
 import com.fiap.techchallenge.infra.security.TokenService;
 import com.fiap.techchallenge.model.Endereco;
 import com.fiap.techchallenge.model.Usuario;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -95,5 +97,15 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
     }
 
+    @PatchMapping("/{id}/senha")
+    public ResponseEntity<?> trocarSenha(@PathVariable Long id, @RequestBody TrocarSenhaDTO senhaDTO) {
+        String novaSenha = senhaDTO.novaSenha();
+
+        if (novaSenha == null || novaSenha.isBlank()) {
+        return ResponseEntity.badRequest().body("A nova senha não pode estar vazia.");
+    }
+        usuarioService.trocarSenha(id, senhaDTO);
+        return ResponseEntity.noContent().build();
+    }
 
 }
