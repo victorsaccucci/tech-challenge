@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.controller;
 
 import com.fiap.techchallenge.Enum.Tipo;
+import com.fiap.techchallenge.dto.AtualizarUsuarioDTO;
 import com.fiap.techchallenge.dto.AutenticacaoDTO;
 import com.fiap.techchallenge.dto.CadastroUsuarioDTO;
 import com.fiap.techchallenge.dto.LoginRespostaDTO;
@@ -29,6 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("api/v1/usuario")
@@ -85,5 +89,11 @@ public class UsuarioController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @PutMapping("/{id}/atualizar")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDTO atualizarDTO) {
+        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
+    }
+
 
 }
