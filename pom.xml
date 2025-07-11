@@ -11,7 +11,7 @@
     <groupId>com.fiap</groupId>
     <artifactId>zecomanda</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>techchallenge</name>
+    <name>zecomanda</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
