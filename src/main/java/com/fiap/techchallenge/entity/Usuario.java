@@ -1,7 +1,7 @@
-package com.fiap.techchallenge.model;
+package com.fiap.techchallenge.entity;
 
 import com.fiap.techchallenge.common.consts.TipoEnum;
-import com.fiap.techchallenge.common.consts.UsuarioCargo;
+import com.fiap.techchallenge.common.consts.UsuarioCargoEnum;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "usuario")
 @EqualsAndHashCode(of = "id")
-public class UsuarioModel implements UserDetails {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class UsuarioModel implements UserDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
-    private EnderecoModel enderecoModel;
+    private Endereco endereco;
 
     @Enumerated(EnumType.STRING)
     private TipoEnum tipoEnum;
@@ -33,11 +33,10 @@ public class UsuarioModel implements UserDetails {
     private String senha;
     private String dtUltimaAtualizacao;
     private String login;
+    private UsuarioCargoEnum cargo;
 
-    private UsuarioCargo cargo;
-
-    public UsuarioModel(EnderecoModel enderecoModel, TipoEnum tipoEnum, String nome, String email, String telefone, String senha, String dtUltimaAtualizacao, String login, UsuarioCargo cargo) {
-        this.enderecoModel = enderecoModel;
+    public Usuario(Endereco endereco, TipoEnum tipoEnum, String nome, String email, String telefone, String senha, String dtUltimaAtualizacao, String login, UsuarioCargoEnum cargo) {
+        this.endereco = endereco;
         this.tipoEnum = tipoEnum;
         this.nome = nome;
         this.email = email;
@@ -48,12 +47,12 @@ public class UsuarioModel implements UserDetails {
         this.cargo = cargo;
     }
 
-    public UsuarioModel() {
+    public Usuario() {
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.cargo == UsuarioCargo.ADMIN) {
+        if (this.cargo == UsuarioCargoEnum.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -98,12 +97,12 @@ public class UsuarioModel implements UserDetails {
         this.id = id;
     }
 
-    public EnderecoModel getEnderecoModel() {
-        return enderecoModel;
+    public Endereco getEndereco() {
+        return endereco;
     }
 
-    public void setEnderecoModel(EnderecoModel enderecoModel) {
-        this.enderecoModel = enderecoModel;
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     public TipoEnum getTipoEnum() {
@@ -162,11 +161,11 @@ public class UsuarioModel implements UserDetails {
         this.login = login;
     }
 
-    public UsuarioCargo getCargo() {
+    public UsuarioCargoEnum getCargo() {
         return cargo;
     }
 
-    public void setCargo(UsuarioCargo cargo) {
+    public void setCargo(UsuarioCargoEnum cargo) {
         this.cargo = cargo;
     }
 }
