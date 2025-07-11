@@ -3,16 +3,15 @@ package com.fiap.techchallenge.controller;
 import com.fiap.techchallenge.common.consts.TipoEnum;
 import com.fiap.techchallenge.dto.*;
 import com.fiap.techchallenge.common.infra.security.TokenService;
-import com.fiap.techchallenge.model.EnderecoModel;
-import com.fiap.techchallenge.model.UsuarioModel;
-import com.fiap.techchallenge.common.consts.UsuarioCargo;
+import com.fiap.techchallenge.entity.Endereco;
+import com.fiap.techchallenge.entity.Usuario;
+import com.fiap.techchallenge.common.consts.UsuarioCargoEnum;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import com.fiap.techchallenge.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +27,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenService tokenService;
@@ -52,24 +48,23 @@ public class UsuarioController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dtUltimaAtualizacao = LocalDateTime.now().format(formatter);
 
-        UsuarioCargo cargo = UsuarioCargo.USER;
-        EnderecoModel enderecoModel = data.enderecoModel();
-        TipoEnum tipoEnum = TipoEnum.CLIENTE;
+        UsuarioCargoEnum cargo = UsuarioCargoEnum.USER;
+        Endereco endereco = data.endereco();
 
-        UsuarioModel novoUsuarioModel = new UsuarioModel(enderecoModel, tipoEnum, data.nome(), data.email(), data.telefone(), senhaCodificado, dtUltimaAtualizacao,
+        Usuario novoUsuario = new Usuario(endereco, TipoEnum.CLIENTE, data.nome(), data.email(), data.telefone(), senhaCodificado, dtUltimaAtualizacao,
                 data.login(), cargo);
 
         String login = data.login();
         String senha = data.senha();
 
-        usuarioService.cadastrarUsuario(novoUsuarioModel, login, senha);
+        usuarioService.cadastrarUsuario(novoUsuario, login, senha);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AutenticacaoDto body) {
-        UsuarioModel user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
+        Usuario user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
         if (passwordEncoder.matches(body.senha(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok(new LoginRespostaDto(token));
@@ -78,7 +73,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}/atualizar")
-    public ResponseEntity<UsuarioModel> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDto atualizarDTO) {
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDto atualizarDTO) {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
     }
 

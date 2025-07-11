@@ -1,10 +1,10 @@
 package com.fiap.techchallenge.dto;
 
-import com.fiap.techchallenge.model.EnderecoModel;
+import com.fiap.techchallenge.entity.Endereco;
 
 public record AtualizarUsuarioDto(
 
-        EnderecoModel enderecoModel,
+        Endereco endereco,
         String email,
         String telefone,
         String login
