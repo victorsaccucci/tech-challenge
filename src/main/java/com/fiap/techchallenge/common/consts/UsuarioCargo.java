@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.model;
+package com.fiap.techchallenge.common.consts;
 
 public enum UsuarioCargo {
     ADMIN("admin"),

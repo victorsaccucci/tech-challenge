@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.infra.security;
+package com.fiap.techchallenge.common.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

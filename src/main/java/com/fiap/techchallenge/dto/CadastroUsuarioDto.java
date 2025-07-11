@@ -1,9 +1,10 @@
 package com.fiap.techchallenge.dto;
 
-import com.fiap.techchallenge.model.Endereco;
+import com.fiap.techchallenge.model.EnderecoModel;
 
-public record CadastroUsuarioDTO(
-        Endereco endereco,
+public record CadastroUsuarioDto(
+
+        EnderecoModel enderecoModel,
         String nome,
         String email,
         String telefone,

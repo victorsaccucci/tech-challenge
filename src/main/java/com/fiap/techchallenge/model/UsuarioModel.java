@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.model;
 
-import com.fiap.techchallenge.Enum.Tipo;
+import com.fiap.techchallenge.common.consts.TipoEnum;
+import com.fiap.techchallenge.common.consts.UsuarioCargo;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "usuario")
 @EqualsAndHashCode(of = "id")
-public class Usuario implements UserDetails {
+public class UsuarioModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +22,10 @@ public class Usuario implements UserDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
+    private EnderecoModel enderecoModel;
 
     @Enumerated(EnumType.STRING)
-    private Tipo tipo;
+    private TipoEnum tipoEnum;
 
     private String nome;
     private String email;
@@ -35,9 +36,9 @@ public class Usuario implements UserDetails {
 
     private UsuarioCargo cargo;
 
-    public Usuario(Endereco endereco, Tipo tipo, String nome, String email, String telefone, String senha, String dtUltimaAtualizacao, String login, UsuarioCargo cargo) {
-        this.endereco = endereco;
-        this.tipo = tipo;
+    public UsuarioModel(EnderecoModel enderecoModel, TipoEnum tipoEnum, String nome, String email, String telefone, String senha, String dtUltimaAtualizacao, String login, UsuarioCargo cargo) {
+        this.enderecoModel = enderecoModel;
+        this.tipoEnum = tipoEnum;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
@@ -47,7 +48,7 @@ public class Usuario implements UserDetails {
         this.cargo = cargo;
     }
 
-    public Usuario() {
+    public UsuarioModel() {
     }
 
     @Override
@@ -97,20 +98,20 @@ public class Usuario implements UserDetails {
         this.id = id;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public EnderecoModel getEnderecoModel() {
+        return enderecoModel;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setEnderecoModel(EnderecoModel enderecoModel) {
+        this.enderecoModel = enderecoModel;
     }
 
-    public Tipo getTipo() {
-        return tipo;
+    public TipoEnum getTipoEnum() {
+        return tipoEnum;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public void setTipoEnum(TipoEnum tipoEnum) {
+        this.tipoEnum = tipoEnum;
     }
 
     public String getNome() {

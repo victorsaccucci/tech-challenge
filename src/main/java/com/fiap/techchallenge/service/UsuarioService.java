@@ -1,8 +1,8 @@
 package com.fiap.techchallenge.service;
 
-import com.fiap.techchallenge.dto.AtualizarUsuarioDTO;
-import com.fiap.techchallenge.dto.TrocarSenhaDTO;
-import com.fiap.techchallenge.model.Usuario;
+import com.fiap.techchallenge.dto.AtualizarUsuarioDto;
+import com.fiap.techchallenge.dto.TrocarSenhaDto;
+import com.fiap.techchallenge.model.UsuarioModel;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,25 +17,25 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario cadastrarUsuario(Usuario usuario, String login, String senha) {
-        return usuarioRepository.save(usuario);
+    public UsuarioModel cadastrarUsuario(UsuarioModel usuarioModel, String login, String senha) {
+        return usuarioRepository.save(usuarioModel);
     }
 
-    public Usuario atualizarUsuario(Long id, AtualizarUsuarioDTO atualizarDTO) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+    public UsuarioModel atualizarUsuario(Long id, AtualizarUsuarioDto atualizarDTO) {
+        UsuarioModel usuarioModel = usuarioRepository.findById(id).orElseThrow();
 
-        usuario.setEmail(atualizarDTO.email());
-        usuario.setLogin(atualizarDTO.login());
-        usuario.setTelefone(atualizarDTO.telefone());
-        usuario.setEndereco(atualizarDTO.endereco());
+        usuarioModel.setEmail(atualizarDTO.email());
+        usuarioModel.setLogin(atualizarDTO.login());
+        usuarioModel.setTelefone(atualizarDTO.telefone());
+        usuarioModel.setEnderecoModel(atualizarDTO.enderecoModel());
 
-        return usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuarioModel);
     }
 
-    public void trocarSenha(Long id, TrocarSenhaDTO senhaDTO) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
-        usuario.setSenha(passwordEncoder.encode(senhaDTO.novaSenha()));
-        usuarioRepository.save(usuario);
+    public void trocarSenha(Long id, TrocarSenhaDto senhaDTO) {
+        UsuarioModel usuarioModel = usuarioRepository.findById(id).orElseThrow();
+        usuarioModel.setSenha(passwordEncoder.encode(senhaDTO.novaSenha()));
+        usuarioRepository.save(usuarioModel);
     }
 
 }

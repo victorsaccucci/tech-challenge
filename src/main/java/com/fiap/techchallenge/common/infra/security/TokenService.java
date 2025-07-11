@@ -1,10 +1,10 @@
-package com.fiap.techchallenge.infra.security;
+package com.fiap.techchallenge.common.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.fiap.techchallenge.model.Usuario;
+import com.fiap.techchallenge.model.UsuarioModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Usuario user) {
+    public String generateToken(UsuarioModel user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 

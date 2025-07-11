@@ -1,11 +1,11 @@
 package com.fiap.techchallenge.controller;
 
-import com.fiap.techchallenge.Enum.Tipo;
+import com.fiap.techchallenge.common.consts.TipoEnum;
 import com.fiap.techchallenge.dto.*;
-import com.fiap.techchallenge.infra.security.TokenService;
-import com.fiap.techchallenge.model.Endereco;
-import com.fiap.techchallenge.model.Usuario;
-import com.fiap.techchallenge.model.UsuarioCargo;
+import com.fiap.techchallenge.common.infra.security.TokenService;
+import com.fiap.techchallenge.model.EnderecoModel;
+import com.fiap.techchallenge.model.UsuarioModel;
+import com.fiap.techchallenge.common.consts.UsuarioCargo;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import com.fiap.techchallenge.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,7 +42,7 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity cadastrarUsuario(@RequestBody @Valid CadastroUsuarioDTO data) {
+    public ResponseEntity cadastrarUsuario(@RequestBody @Valid CadastroUsuarioDto data) {
 
         if (!this.usuarioRepository.findByEmail(data.email()).isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -53,37 +53,37 @@ public class UsuarioController {
         String dtUltimaAtualizacao = LocalDateTime.now().format(formatter);
 
         UsuarioCargo cargo = UsuarioCargo.USER;
-        Endereco endereco = data.endereco();
-        Tipo tipo = Tipo.CLIENTE;
+        EnderecoModel enderecoModel = data.enderecoModel();
+        TipoEnum tipoEnum = TipoEnum.CLIENTE;
 
-        Usuario novoUsuario = new Usuario(endereco, tipo, data.nome(), data.email(), data.telefone(), senhaCodificado, dtUltimaAtualizacao,
+        UsuarioModel novoUsuarioModel = new UsuarioModel(enderecoModel, tipoEnum, data.nome(), data.email(), data.telefone(), senhaCodificado, dtUltimaAtualizacao,
                 data.login(), cargo);
 
         String login = data.login();
         String senha = data.senha();
 
-        usuarioService.cadastrarUsuario(novoUsuario, login, senha);
+        usuarioService.cadastrarUsuario(novoUsuarioModel, login, senha);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AutenticacaoDTO body) {
-        Usuario user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity login(@RequestBody AutenticacaoDto body) {
+        UsuarioModel user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
         if (passwordEncoder.matches(body.senha(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginRespostaDTO(token));
+            return ResponseEntity.ok(new LoginRespostaDto(token));
         }
         return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{id}/atualizar")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDTO atualizarDTO) {
+    public ResponseEntity<UsuarioModel> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDto atualizarDTO) {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
     }
 
     @PatchMapping("/{id}/senha")
-    public ResponseEntity<?> trocarSenha(@PathVariable Long id, @RequestBody TrocarSenhaDTO senhaDTO) {
+    public ResponseEntity<?> trocarSenha(@PathVariable Long id, @RequestBody TrocarSenhaDto senhaDTO) {
         String novaSenha = senhaDTO.novaSenha();
 
         if (novaSenha == null || novaSenha.isBlank()) {
