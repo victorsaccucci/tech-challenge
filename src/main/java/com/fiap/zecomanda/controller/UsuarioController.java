@@ -77,15 +77,27 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
     }
 
-    @PatchMapping("/{id}/senha")
+    @PatchMapping("/{id}/trocar-senha")
     public ResponseEntity<?> trocarSenha(@PathVariable Long id, @RequestBody TrocarSenhaDto senhaDTO) {
-        String novaSenha = senhaDTO.novaSenha();
 
-        if (novaSenha == null || novaSenha.isBlank()) {
-            return ResponseEntity.badRequest().body("A nova senha não pode estar vazia.");
+        if (senhaDTO.senhaAtual() == null || senhaDTO.senhaAtual().isBlank()) {
+            return ResponseEntity.badRequest().body("A senha atual é obrigatória.");
         }
-        usuarioService.trocarSenha(id, senhaDTO);
-        return ResponseEntity.noContent().build();
+
+        if (senhaDTO.novaSenha() == null || senhaDTO.novaSenha().isBlank()) {
+            return ResponseEntity.badRequest().body("A nova senha é obrigatória.");
+        }
+
+        if (!senhaDTO.novaSenha().equals(senhaDTO.confirmacaoSenha())) {
+            return ResponseEntity.badRequest().body("As senhas não coincidem");
+        }
+
+        try {
+            usuarioService.trocarSenha(id, senhaDTO);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}/deletar")
