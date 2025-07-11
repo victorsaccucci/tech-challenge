@@ -1,5 +1,5 @@
 package com.fiap.zecomanda.dto;
 
-import com.fiap.zecomanda.model.Usuario;
+import com.fiap.zecomanda.entity.Usuario;
 
-public record LoginRespostaDTO(String token) {}
+public record LoginRespostaDto(String token) {}

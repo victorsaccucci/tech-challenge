@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.dto;
-import com.fiap.zecomanda.model.Endereco;
+import com.fiap.zecomanda.entity.Endereco;
 
-public record CadastroUsuarioDTO(
+public record CadastroUsuarioDto(
         Endereco endereco,
         String nome,
         String email,
