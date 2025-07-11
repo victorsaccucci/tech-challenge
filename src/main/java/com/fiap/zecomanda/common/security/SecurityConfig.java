@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.infra.security;
+package com.fiap.zecomanda.common.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

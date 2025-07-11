@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.controller;
 
 import com.fiap.zecomanda.common.consts.TipoEnum;
-import com.fiap.zecomanda.common.infra.security.TokenService;
+import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
 import com.fiap.zecomanda.entity.Endereco;
 import com.fiap.zecomanda.entity.Usuario;
