@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.model;
+package com.fiap.techchallenge.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "endereco")
 @Data
-public class EnderecoModel {
+public class Endereco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

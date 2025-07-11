@@ -1,6 +1,6 @@
 package com.fiap.techchallenge.common.infra.security;
 
-import com.fiap.techchallenge.model.UsuarioModel;
+import com.fiap.techchallenge.entity.Usuario;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UsuarioModel user = this.repository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Usuario user = this.repository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 }

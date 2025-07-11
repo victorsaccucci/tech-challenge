@@ -1,6 +1,6 @@
 package com.fiap.techchallenge.common.infra.security;
 
-import com.fiap.techchallenge.model.UsuarioModel;
+import com.fiap.techchallenge.entity.Usuario;
 import com.fiap.techchallenge.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if (login != null) {
-            UsuarioModel user = userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("User Not Found"));
+            Usuario user = userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("User Not Found"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

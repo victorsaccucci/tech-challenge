@@ -1,12 +1,12 @@
 package com.fiap.techchallenge.common.consts;
 
-public enum UsuarioCargo {
+public enum UsuarioCargoEnum {
     ADMIN("admin"),
     USER("user");
 
     private String cargo;
 
-    UsuarioCargo(String cargo) {
+    UsuarioCargoEnum(String cargo) {
         this.cargo = cargo;
     }
 

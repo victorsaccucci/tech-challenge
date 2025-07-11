@@ -1,17 +1,17 @@
 package com.fiap.techchallenge.repository;
 
-import com.fiap.techchallenge.model.UsuarioModel;
+import com.fiap.techchallenge.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 
-    Optional<UsuarioModel> findByLogin(String login);
+    Optional<Usuario> findByLogin(String login);
 
-    Optional<UsuarioModel> findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
 }
