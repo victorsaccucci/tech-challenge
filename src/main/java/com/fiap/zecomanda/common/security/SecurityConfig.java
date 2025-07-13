@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.infra.security;
+package com.fiap.zecomanda.common.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,10 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuario").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario/cadastrar").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}/atualizar").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuario/{id}/trocar-senha").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/usuario/{id}/deletar").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/usuario/{id}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

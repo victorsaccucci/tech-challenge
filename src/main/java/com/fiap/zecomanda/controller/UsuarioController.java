@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.controller;
 
 import com.fiap.zecomanda.common.consts.TipoEnum;
-import com.fiap.zecomanda.common.infra.security.TokenService;
+import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
 import com.fiap.zecomanda.entity.Endereco;
 import com.fiap.zecomanda.entity.Usuario;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @RestController
@@ -72,9 +73,10 @@ public class UsuarioController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/{id}/atualizar")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody AtualizarUsuarioDto atualizarDTO) {
-        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, atualizarDTO));
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        var usuarios = this.usuarioService.listarUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
     @PatchMapping("/{id}/trocar-senha")
@@ -100,9 +102,15 @@ public class UsuarioController {
         }
     }
 
-    @DeleteMapping("/{id}/deletar")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
-        usuarioService.deletarUsuario(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateVeiculo(@RequestBody Usuario usuario, @PathVariable("id") Long id) {
+        this.usuarioService.updateUsuario(usuario, id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVeiculo(@PathVariable("id") Long id) {
+         this.usuarioService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
