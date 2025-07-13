@@ -24,6 +24,12 @@ public class UsuarioService {
 
     public void trocarSenha(Long id, TrocarSenhaDto senhaDTO) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+
+        boolean senhaAtualCorreta = passwordEncoder.matches(senhaDTO.senhaAtual(), usuario.getSenha());
+        
+        if (!senhaAtualCorreta) {
+        throw new IllegalArgumentException("A senha atual está incorreta.");
+    }
         usuario.setSenha(passwordEncoder.encode(senhaDTO.novaSenha()));
         usuarioRepository.save(usuario);
     }
