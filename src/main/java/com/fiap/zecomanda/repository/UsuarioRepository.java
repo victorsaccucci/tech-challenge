@@ -17,6 +17,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByEmail(String email);
 
+    @Query(value = "SELECT * FROM usuario where login = ?", nativeQuery = true)
+    Usuario encontrarUsuarioPorLogin(String login);
+
     @Modifying
     @Transactional
     @Query("UPDATE Usuario u SET u.nome = :#{#usuario.nome}, " +

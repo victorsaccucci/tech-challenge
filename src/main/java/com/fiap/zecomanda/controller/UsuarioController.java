@@ -79,8 +79,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PatchMapping("/{id}/trocar-senha")
-    public ResponseEntity<?> trocarSenha(@PathVariable Long id, @RequestBody TrocarSenhaDto senhaDTO) {
+    @PatchMapping("/trocar-senha")
+    public ResponseEntity<?> trocarSenha(
+            @RequestBody TrocarSenhaDto senhaDTO,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+
+        Usuario usuarioEncontrado = usuarioService.extrairUsuarioDoToken(authorizationHeader);
 
         if (senhaDTO.senhaAtual() == null || senhaDTO.senhaAtual().isBlank()) {
             return ResponseEntity.badRequest().body("A senha atual é obrigatória.");
@@ -95,7 +100,7 @@ public class UsuarioController {
         }
 
         try {
-            usuarioService.trocarSenha(id, senhaDTO);
+            usuarioService.trocarSenha(usuarioEncontrado.getId(), senhaDTO);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

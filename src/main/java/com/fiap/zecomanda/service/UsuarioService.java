@@ -1,5 +1,6 @@
 package com.fiap.zecomanda.service;
 
+import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.TrocarSenhaDto;
 import com.fiap.zecomanda.entity.Usuario;
 import com.fiap.zecomanda.repository.UsuarioRepository;
@@ -17,6 +18,9 @@ public class UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenService tokenService;
 
     public Usuario cadastrarUsuario(Usuario usuario, String login, String senha) {
         return usuarioRepository.save(usuario);
@@ -50,5 +54,11 @@ public class UsuarioService {
 
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    public Usuario extrairUsuarioDoToken(String token){
+        String subjectLogin = tokenService.extractSubject(token);
+        Usuario usuarioEncontrado = usuarioRepository.encontrarUsuarioPorLogin(subjectLogin);
+        return usuarioEncontrado;
     }
 }
