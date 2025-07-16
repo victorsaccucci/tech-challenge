@@ -1,6 +1,6 @@
 package com.fiap.zecomanda.entity;
 
-import com.fiap.zecomanda.common.consts.EnumType;
+import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.consts.UserRole;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private Address address;
 
     @Enumerated(jakarta.persistence.EnumType.STRING)
-    private EnumType enumType;
+    private UserType userType;
 
     private String name;
     private String email;
@@ -40,9 +40,9 @@ public class User implements UserDetails {
     private String login;
     private UserRole role;
 
-    public User(Address address, EnumType enumType, String name, String email, String phoneNumber, String password, String updatedAt, String login, UserRole role) {
+    public User(Address address, UserType userType, String name, String email, String phoneNumber, String password, String updatedAt, String login, UserRole role) {
         this.address = address;
-        this.enumType = enumType;
+        this.userType = userType;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -110,12 +110,12 @@ public class User implements UserDetails {
         this.address = address;
     }
 
-    public EnumType getEnumType() {
-        return enumType;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setEnumType(EnumType enumType) {
-        this.enumType = enumType;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public String getName() {

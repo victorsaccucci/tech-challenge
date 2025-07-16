@@ -1,6 +1,6 @@
 package com.fiap.zecomanda.controller;
 
-import com.fiap.zecomanda.common.consts.EnumType;
+import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
 import com.fiap.zecomanda.entity.Address;
@@ -52,7 +52,7 @@ public class UserController {
         UserRole cargo = UserRole.USER;
         Address address = data.address();
 
-        User novoUser = new User(address, EnumType.CLIENTE, data.name(), data.email(), data.password(), senhaCodificado, dtUltimaAtualizacao,
+        User novoUser = new User(address, UserType.CUSTOMER, data.name(), data.email(), data.password(), senhaCodificado, dtUltimaAtualizacao,
                 data.login(), cargo);
 
         usuarioService.registerUser(novoUser);
