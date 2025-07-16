@@ -39,10 +39,10 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity cadastrarUsuario(@RequestBody @Valid RegisterUserDTO data) {
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid RegisterUserDTO data) {
 
         if (!this.userRepository.findByEmail(data.email()).isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(409).body("User already exists.");
         }
 
         String senhaCodificado = new BCryptPasswordEncoder().encode(data.password());
