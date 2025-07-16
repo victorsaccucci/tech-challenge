@@ -1,6 +1,6 @@
 package com.fiap.zecomanda.common.consts;
 
-public enum TipoEnum {
+public enum EnumType {
 
     GERENTE,
     CLIENTE,

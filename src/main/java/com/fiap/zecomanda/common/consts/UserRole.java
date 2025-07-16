@@ -1,12 +1,12 @@
 package com.fiap.zecomanda.common.consts;
 
-public enum UsuarioCargoEnum {
+public enum UserRole {
     ADMIN("admin"),
     USER("user");
 
     private String cargo;
 
-    UsuarioCargoEnum(String cargo) {
+    UserRole(String cargo) {
         this.cargo = cargo;
     }
 

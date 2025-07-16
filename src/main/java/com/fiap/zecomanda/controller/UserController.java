@@ -1,12 +1,12 @@
 package com.fiap.zecomanda.controller;
 
-import com.fiap.zecomanda.common.consts.TipoEnum;
+import com.fiap.zecomanda.common.consts.EnumType;
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
-import com.fiap.zecomanda.entity.Endereco;
-import com.fiap.zecomanda.entity.Usuario;
-import com.fiap.zecomanda.common.consts.UsuarioCargoEnum;
-import com.fiap.zecomanda.repository.UsuarioRepository;
+import com.fiap.zecomanda.entity.Address;
+import com.fiap.zecomanda.entity.User;
+import com.fiap.zecomanda.common.consts.UserRole;
+import com.fiap.zecomanda.repository.UserRepository;
 import com.fiap.zecomanda.service.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,9 +22,9 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("api/v1/usuario")
-@Tag(name = "Usuarios", description = "Controller para crud de usuários")
-public class UsuarioController {
+@RequestMapping("api/v1/user")
+@Tag(name = "User", description = "CRUD Controller for Users")
+public class UserController {
 
     @Autowired
     private UsuarioService usuarioService;
@@ -33,74 +33,71 @@ public class UsuarioController {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/cadastrar")
-    public ResponseEntity cadastrarUsuario(@RequestBody @Valid CadastroUsuarioDto data) {
+    @PostMapping("/register")
+    public ResponseEntity cadastrarUsuario(@RequestBody @Valid RegisterUserDTO data) {
 
-        if (!this.usuarioRepository.findByEmail(data.email()).isEmpty()) {
+        if (!this.userRepository.findByEmail(data.email()).isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        String senhaCodificado = new BCryptPasswordEncoder().encode(data.senha());
+        String senhaCodificado = new BCryptPasswordEncoder().encode(data.password());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String dtUltimaAtualizacao = LocalDateTime.now().format(formatter);
 
-        UsuarioCargoEnum cargo = UsuarioCargoEnum.USER;
-        Endereco endereco = data.endereco();
+        UserRole cargo = UserRole.USER;
+        Address address = data.address();
 
-        Usuario novoUsuario = new Usuario(endereco, TipoEnum.CLIENTE, data.nome(), data.email(), data.telefone(), senhaCodificado, dtUltimaAtualizacao,
+        User novoUser = new User(address, EnumType.CLIENTE, data.name(), data.email(), data.password(), senhaCodificado, dtUltimaAtualizacao,
                 data.login(), cargo);
 
-        String login = data.login();
-        String senha = data.senha();
-
-        usuarioService.cadastrarUsuario(novoUsuario, login, senha);
+        usuarioService.registerUser(novoUser);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AutenticacaoDto body) {
-        Usuario user = this.usuarioRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
-        if (passwordEncoder.matches(body.senha(), user.getPassword())) {
+    public ResponseEntity login(@RequestBody AuthenticationDTO body) {
+        User user = this.userRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
+        if (passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginRespostaDto(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token));
         }
         return ResponseEntity.badRequest().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        var usuarios = this.usuarioService.listarUsuarios();
+    public ResponseEntity<List<User>> listarUsuarios() {
+        var usuarios = this.usuarioService.findAllUsers();
         return ResponseEntity.ok(usuarios);
     }
 
-    @PatchMapping("/trocar-senha")
+    @PatchMapping("/change-password")
     public ResponseEntity<?> trocarSenha(
-            @RequestBody TrocarSenhaDto senhaDTO,
+            @RequestBody ChangePasswordDTO senhaDTO,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
 
-        Usuario usuarioEncontrado = usuarioService.extrairUsuarioDoToken(authorizationHeader);
+        User userEncontrado = usuarioService.extractUserSubject(authorizationHeader);
 
-        if (senhaDTO.senhaAtual() == null || senhaDTO.senhaAtual().isBlank()) {
+        if (senhaDTO.currentPassword() == null || senhaDTO.currentPassword().isBlank()) {
             return ResponseEntity.badRequest().body("A senha atual é obrigatória.");
         }
 
-        if (senhaDTO.novaSenha() == null || senhaDTO.novaSenha().isBlank()) {
+        if (senhaDTO.newPassword() == null || senhaDTO.newPassword().isBlank()) {
             return ResponseEntity.badRequest().body("A nova senha é obrigatória.");
         }
 
-        if (!senhaDTO.novaSenha().equals(senhaDTO.confirmacaoSenha())) {
+        if (!senhaDTO.newPassword().equals(senhaDTO.confirmationPassword())) {
             return ResponseEntity.badRequest().body("As senhas não coincidem");
         }
 
         try {
-            usuarioService.trocarSenha(usuarioEncontrado.getId(), senhaDTO);
+            usuarioService.updatePassword(userEncontrado.getId(), senhaDTO);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -108,8 +105,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateVeiculo(@RequestBody Usuario usuario, @PathVariable("id") Long id) {
-        this.usuarioService.updateUsuario(usuario, id);
+    public ResponseEntity<Void> updateVeiculo(@RequestBody User user, @PathVariable("id") Long id) {
+        this.usuarioService.updateUser(user, id);
         return ResponseEntity.ok().build();
     }
 
