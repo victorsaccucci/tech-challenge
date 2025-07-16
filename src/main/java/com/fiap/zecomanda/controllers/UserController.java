@@ -39,32 +39,32 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid RegisterUserDTO data) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserDTO data) {
 
         if (!this.userRepository.findByEmail(data.email()).isEmpty()) {
             return ResponseEntity.status(409).body("User already exists.");
         }
 
-        String senhaCodificado = new BCryptPasswordEncoder().encode(data.password());
+        String encodedPassword = new BCryptPasswordEncoder().encode(data.password());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dtUltimaAtualizacao = LocalDateTime.now().format(formatter);
+        String updatedAt = LocalDateTime.now().format(formatter);
 
-        UserRole cargo = UserRole.USER;
+        UserRole typeUserRole = UserRole.USER;
         Address address = data.address();
 
-        User novoUser = new User(address, UserType.CUSTOMER, data.name(), data.email(), data.password(), senhaCodificado, dtUltimaAtualizacao,
-                data.login(), cargo);
+        User newUser = new User(address, UserType.CUSTOMER, data.name(), data.email(), data.password(), encodedPassword, updatedAt,
+                data.login(), typeUserRole);
 
-        usuarioService.registerUser(novoUser);
+        usuarioService.registerUser(newUser);
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationDTO body) {
-        User user = this.userRepository.findByLogin(body.login())
+    public ResponseEntity<?> login(@RequestBody AuthenticationDTO authBody) {
+        User user = this.userRepository.findByLogin(authBody.login())
                 .orElse(null);
-        if (user != null && passwordEncoder.matches(body.password(), user.getPassword())) {
+        if (user != null && passwordEncoder.matches(authBody.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok().body(new LoginResponseDTO(token, "Login succeeded."));
         }
@@ -72,33 +72,32 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> listarUsuarios() {
-        var usuarios = this.usuarioService.findAllUsers();
-        return ResponseEntity.ok(usuarios);
+    public ResponseEntity<List<User>> getUsers() {
+        var allUsers = this.usuarioService.findAllUsers();
+        return ResponseEntity.ok(allUsers);
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<?> trocarSenha(
-            @RequestBody ChangePasswordDTO senhaDTO,
+    public ResponseEntity<?> changePassword(
+            @RequestBody ChangePasswordDTO passwordDTO,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
+        User foundUser = usuarioService.extractUserSubject(authorizationHeader);
 
-        User userEncontrado = usuarioService.extractUserSubject(authorizationHeader);
-
-        if (senhaDTO.currentPassword() == null || senhaDTO.currentPassword().isBlank()) {
-            return ResponseEntity.badRequest().body("A senha atual é obrigatória.");
+        if (passwordDTO.currentPassword() == null || passwordDTO.currentPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("Password is required.");
         }
 
-        if (senhaDTO.newPassword() == null || senhaDTO.newPassword().isBlank()) {
-            return ResponseEntity.badRequest().body("A nova senha é obrigatória.");
+        if (passwordDTO.newPassword() == null || passwordDTO.newPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("New password is required.");
         }
 
-        if (!senhaDTO.newPassword().equals(senhaDTO.confirmationPassword())) {
-            return ResponseEntity.badRequest().body("As senhas não coincidem");
+        if (!passwordDTO.newPassword().equals(passwordDTO.confirmationPassword())) {
+            return ResponseEntity.badRequest().body("Password confirmation does not match.");
         }
 
         try {
-            usuarioService.updatePassword(userEncontrado.getId(), senhaDTO);
+            usuarioService.updatePassword(foundUser.getId(), passwordDTO);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,13 +105,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateVeiculo(@RequestBody User user, @PathVariable("id") Long id) {
+    public ResponseEntity<Void> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
         this.usuarioService.updateUser(user, id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVeiculo(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
          this.usuarioService.delete(id);
         return ResponseEntity.ok().build();
     }
