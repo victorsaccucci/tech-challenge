@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserDTO data) {
 
-        if (this.userRepository.findByEmail(data.email()).isEmpty()) {
+        if (userRepository.findByLoginAndPassword(data.login(), data.password()).isPresent()) {
             return ResponseEntity.status(409).body("User already exists.");
         }
 
@@ -113,7 +113,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
-         this.usuarioService.delete(id);
+        this.usuarioService.delete(id);
         return ResponseEntity.ok().build();
     }
 }
