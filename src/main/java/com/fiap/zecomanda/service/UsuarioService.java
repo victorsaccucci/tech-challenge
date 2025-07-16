@@ -1,9 +1,9 @@
 package com.fiap.zecomanda.service;
 
 import com.fiap.zecomanda.common.security.TokenService;
-import com.fiap.zecomanda.dto.TrocarSenhaDto;
-import com.fiap.zecomanda.entity.Usuario;
-import com.fiap.zecomanda.repository.UsuarioRepository;
+import com.fiap.zecomanda.dto.ChangePasswordDTO;
+import com.fiap.zecomanda.entity.User;
+import com.fiap.zecomanda.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.List;
 public class UsuarioService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -22,43 +22,43 @@ public class UsuarioService {
     @Autowired
     private TokenService tokenService;
 
-    public Usuario cadastrarUsuario(Usuario usuario, String login, String senha) {
-        return usuarioRepository.save(usuario);
+    public User registerUser(User user) {
+        return userRepository.save(user);
     }
 
-    public void trocarSenha(Long id, TrocarSenhaDto senhaDTO) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+    public void updatePassword(Long id, ChangePasswordDTO passwordDTO) {
+        User user = userRepository.findById(id).orElseThrow();
 
-        boolean senhaAtualCorreta = passwordEncoder.matches(senhaDTO.senhaAtual(), usuario.getSenha());
+        boolean validPassword = passwordEncoder.matches(passwordDTO.currentPassword(), user.getPassword());
         
-        if (!senhaAtualCorreta) {
-        throw new IllegalArgumentException("A senha atual está incorreta.");
+        if (!validPassword) {
+        throw new IllegalArgumentException("The current passoword isn`t incorrect.");
     }
-        usuario.setSenha(passwordEncoder.encode(senhaDTO.novaSenha()));
-        usuarioRepository.save(usuario);
+        user.setPassword(passwordEncoder.encode(passwordDTO.newPassword()));
+        userRepository.save(user);
     }
 
-    public void updateUsuario(Usuario usuario, Long id) {
-        var update = this.usuarioRepository.update(usuario, id);
+    public void updateUser(User user, Long id) {
+        var update = this.userRepository.update(user, id);
         if (update == 0) {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("User not found");
         }
     }
 
     public void delete(Long id) {
-        var delete = this.usuarioRepository.delete(id);
+        var delete = this.userRepository.delete(id);
         if (delete == 0) {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("User not found");
         }
     }
 
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
-    public Usuario extrairUsuarioDoToken(String token){
+    public User extractUserSubject(String token){
         String subjectLogin = tokenService.extractSubject(token);
-        Usuario usuarioEncontrado = usuarioRepository.encontrarUsuarioPorLogin(subjectLogin);
-        return usuarioEncontrado;
+        User foundUser = userRepository.findUserByLogin(subjectLogin);
+        return foundUser;
     }
 }

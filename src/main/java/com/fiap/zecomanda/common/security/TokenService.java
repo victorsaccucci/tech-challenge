@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.fiap.zecomanda.entity.Usuario;
+import com.fiap.zecomanda.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,13 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Usuario user) {
+    public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             String token = JWT.create()
                     .withIssuer("login-auth-api")
-                    .withSubject(user.getLogin())
+                    .withSubject(String.valueOf(user.getId()))
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
             return token;
@@ -54,7 +54,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Erro ao extrair o subject do token", exception);
+            throw new RuntimeException("Error on extract token subject", exception);
         }
     }
 

@@ -14,8 +14,8 @@ public class OpenApiConfig {
     public OpenAPI techChallengeOpenAPI() {
         return new OpenAPI().info(
                 new Info()
-                        .title("Tech Challenge Fiap")
-                        .description("Um Projeto CRUD de Restaurante, desenvolvido na fase 1 ")
+                        .title("Tech Challenge FIAP")
+                        .description("ZeComanda - Simple user management system with basic CRUD operations.")
                         .version("v0.0.1")
         );
     }

@@ -1,6 +1,6 @@
 package com.fiap.zecomanda.repository;
 
-import com.fiap.zecomanda.entity.Usuario;
+import com.fiap.zecomanda.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,25 +10,25 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 
-    Optional<Usuario> findByLogin(String login);
+    Optional<User> findByLogin(String login);
 
-    Optional<Usuario> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    @Query(value = "SELECT * FROM usuario where login = ?", nativeQuery = true)
-    Usuario encontrarUsuarioPorLogin(String login);
+    @Query(value = "SELECT * FROM user where login = ?", nativeQuery = true)
+    User findUserByLogin(String login);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Usuario u SET u.nome = :#{#usuario.nome}, " +
+    @Query("UPDATE User u SET u.name = :#{#usuario.name}, " +
             "u.email = :#{#usuario.email} WHERE u.id = :id")
-    Integer update(Usuario usuario, Long id);
+    Integer update(User user, Long id);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Usuario u WHERE u.id = :id")
+    @Query("DELETE FROM User WHERE id = ?1")
     Integer delete(Long id);
 
 }
