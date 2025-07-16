@@ -32,9 +32,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuario").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/usuario/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuario/{id}/trocar-senha").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/usuario/{id}").permitAll()
