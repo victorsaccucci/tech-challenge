@@ -21,8 +21,6 @@ public class SecurityConfig {
 
     @Autowired
     SecurityFilter securityFilter;
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,10 +32,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/usuario").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuario/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/usuario/{id}/trocar-senha").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/usuario/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/user/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/user/{id}/change-password").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user/{id}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

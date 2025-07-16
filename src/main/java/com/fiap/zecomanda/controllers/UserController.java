@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -41,7 +42,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserDTO data) {
 
-        if (!this.userRepository.findByEmail(data.email()).isEmpty()) {
+        if (this.userRepository.findByEmail(data.email()).isEmpty()) {
             return ResponseEntity.status(409).body("User already exists.");
         }
 
@@ -72,8 +73,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        var allUsers = this.usuarioService.findAllUsers();
+    public ResponseEntity<List<User>> getUsers(@RequestParam("page") int page, @RequestParam("size") int size) {
+        var allUsers = this.usuarioService.findAllUsers(page, size).getContent();
         return ResponseEntity.ok(allUsers);
     }
 
@@ -82,7 +83,7 @@ public class UserController {
             @RequestBody ChangePasswordDTO passwordDTO,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        User foundUser = usuarioService.extractUserSubject(authorizationHeader);
+        Optional<User> foundUser = usuarioService.extractUserSubject(authorizationHeader);
 
         if (passwordDTO.currentPassword() == null || passwordDTO.currentPassword().isBlank()) {
             return ResponseEntity.badRequest().body("Password is required.");
@@ -97,7 +98,7 @@ public class UserController {
         }
 
         try {
-            usuarioService.updatePassword(foundUser.getId(), passwordDTO);
+            usuarioService.updatePassword(foundUser.get().getId(), passwordDTO);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
