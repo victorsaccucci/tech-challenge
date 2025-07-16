@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "eda62c15-6f31-4499-8ce8-4cf80983e2e6",
+		"_postman_id": "b115f8e0-6c17-4cfd-a246-e8f587a4fda3",
 		"name": "ZeComanda User API",
 		"description": "Collection of requests for ZeComanda system user endpoints. ZeComanda is a Spring Boot project with database, MVC architecture and RESTful API, created for the Tech Challenge of the Postgraduate course in Java Architecture and Development. The system is named ZeComanda and, at this first stage, implements CRUD for users (clients). In the next steps, CRUD for managers will also be created.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -70,7 +70,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"login\": \"johnsilva\",\n  \"password\": \"securePassword123\"\n}"
+					"raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senhaSegura123\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/user/login",
@@ -91,6 +91,9 @@
 		},
 		{
 			"name": "List Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
@@ -99,17 +102,36 @@
 						"value": "Bearer {{token}}"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/user",
+					"raw": "http://localhost:8080/api/v1/user?page=0&size=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"v1",
 						"user"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
 					]
 				}
 			},
