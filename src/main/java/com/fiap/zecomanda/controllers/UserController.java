@@ -1,13 +1,13 @@
-package com.fiap.zecomanda.controller;
+package com.fiap.zecomanda.controllers;
 
 import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
-import com.fiap.zecomanda.entity.Address;
-import com.fiap.zecomanda.entity.User;
+import com.fiap.zecomanda.entities.Address;
+import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.common.consts.UserRole;
-import com.fiap.zecomanda.repository.UserRepository;
-import com.fiap.zecomanda.service.UsuarioService;
+import com.fiap.zecomanda.repositories.UserRepository;
+import com.fiap.zecomanda.services.UsuarioService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

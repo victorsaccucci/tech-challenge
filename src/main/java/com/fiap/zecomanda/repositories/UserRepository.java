@@ -1,6 +1,6 @@
-package com.fiap.zecomanda.repository;
+package com.fiap.zecomanda.repositories;
 
-import com.fiap.zecomanda.entity.User;
+import com.fiap.zecomanda.entities.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

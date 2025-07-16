@@ -1,9 +1,9 @@
-package com.fiap.zecomanda.service;
+package com.fiap.zecomanda.services;
 
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.entity.User;
-import com.fiap.zecomanda.repository.UserRepository;
+import com.fiap.zecomanda.entities.User;
+import com.fiap.zecomanda.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

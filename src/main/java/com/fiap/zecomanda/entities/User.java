@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.entity;
+package com.fiap.zecomanda.entities;
 
 import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.consts.UserRole;

@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.common.security;
 
-import com.fiap.zecomanda.entity.User;
-import com.fiap.zecomanda.repository.UserRepository;
+import com.fiap.zecomanda.entities.User;
+import com.fiap.zecomanda.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
