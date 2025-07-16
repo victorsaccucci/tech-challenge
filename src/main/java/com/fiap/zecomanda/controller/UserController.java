@@ -61,13 +61,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO body) {
-        User user = this.userRepository.findByLogin(body.login()).orElseThrow(() -> new RuntimeException("User not found"));
-        if (passwordEncoder.matches(body.password(), user.getPassword())) {
+    public ResponseEntity<?> login(@RequestBody AuthenticationDTO body) {
+        User user = this.userRepository.findByLogin(body.login())
+                .orElse(null);
+        if (user != null && passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok().body(new LoginResponseDTO(token, "Login succeeded."));
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(401).body("Invalid credentials. Failed to login.");
     }
 
     @GetMapping
