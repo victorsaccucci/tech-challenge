@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.common.security;
 
-import com.fiap.zecomanda.entity.User;
-import com.fiap.zecomanda.repository.UserRepository;
+import com.fiap.zecomanda.entities.User;
+import com.fiap.zecomanda.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

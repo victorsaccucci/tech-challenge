@@ -1,7 +1,7 @@
 package com.fiap.zecomanda.common.security;
 
-import com.fiap.zecomanda.entity.User;
-import com.fiap.zecomanda.repository.UserRepository;
+import com.fiap.zecomanda.entities.User;
+import com.fiap.zecomanda.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,10 +27,10 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        var login = tokenService.validateToken(token);
+        var id = tokenService.validateToken(token);
 
-        if (login != null) {
-            User user = userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("User Not Found"));
+        if (id != null) {
+            User user = userRepository.findById(Long.valueOf(id)).orElseThrow(() -> new RuntimeException("User Not Found"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

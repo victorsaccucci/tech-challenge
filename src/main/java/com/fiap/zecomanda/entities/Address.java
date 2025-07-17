@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.entity;
+package com.fiap.zecomanda.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

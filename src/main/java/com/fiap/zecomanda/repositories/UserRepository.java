@@ -1,7 +1,9 @@
-package com.fiap.zecomanda.repository;
+package com.fiap.zecomanda.repositories;
 
-import com.fiap.zecomanda.entity.User;
+import com.fiap.zecomanda.entities.User;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,11 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     Optional<User> findByLogin(String login);
-
-    Optional<User> findByEmail(String email);
-
-    @Query(value = "SELECT * FROM user where login = ?", nativeQuery = true)
-    User findUserByLogin(String login);
+    Optional<User> findByLoginAndPassword(String login, String password);
+    Page<User> findAll(Pageable pageable);
 
     @Modifying
     @Transactional

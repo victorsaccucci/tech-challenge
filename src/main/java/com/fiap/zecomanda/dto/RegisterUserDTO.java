@@ -1,5 +1,6 @@
 package com.fiap.zecomanda.dto;
-import com.fiap.zecomanda.entity.Address;
+
+import com.fiap.zecomanda.entities.Address;
 
 public record RegisterUserDTO(
         Address address,
