@@ -2,6 +2,7 @@ package com.fiap.zecomanda.services;
 
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.ChangePasswordDTO;
+import com.fiap.zecomanda.dto.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +34,16 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow();
 
         boolean validPassword = passwordEncoder.matches(passwordDTO.currentPassword(), user.getPassword());
-        
+
         if (!validPassword) {
-        throw new IllegalArgumentException("The current passoword isn`t incorrect.");
-    }
+            throw new IllegalArgumentException("The current passoword isn`t incorrect.");
+        }
         user.setPassword(passwordEncoder.encode(passwordDTO.newPassword()));
         userRepository.save(user);
     }
 
-    public void updateUser(User user, Long id) {
-        var update = this.userRepository.update(user, id);
+    public void updateUser(UpdateUserDTO user, Long id) {
+        var update = this.userRepository.updateUser(user.name(), user.email(), user.phoneNumber(), user.login(), id);
         if (update == 0) {
             throw new RuntimeException("User not found");
         }

@@ -33,9 +33,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/user/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/user").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/user/change-password").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
