@@ -60,8 +60,15 @@ public class UsuarioService {
         return userRepository.findAll(pageable);
     }
 
-    public Optional<User> extractUserSubject(String token){
+    public Optional<User> extractUserSubject(String tokenHeader) {
+
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Token inválido ou ausente");
+        }
+
+        String token = tokenHeader.substring(7);
         String subjectLogin = tokenService.extractSubject(token);
-        return userRepository.findByLogin(subjectLogin);
+        return userRepository.findById(Long.valueOf(subjectLogin));
     }
+
 }
