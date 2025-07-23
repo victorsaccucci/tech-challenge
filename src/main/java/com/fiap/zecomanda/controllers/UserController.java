@@ -1,13 +1,13 @@
 package com.fiap.zecomanda.controllers;
 
+import com.fiap.zecomanda.common.consts.UserRole;
 import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.*;
 import com.fiap.zecomanda.entities.Address;
 import com.fiap.zecomanda.entities.User;
-import com.fiap.zecomanda.common.consts.UserRole;
 import com.fiap.zecomanda.repositories.UserRepository;
-import com.fiap.zecomanda.services.UsuarioService;
+import com.fiap.zecomanda.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UserService userService;
 
     @Autowired
     private TokenService tokenService;
@@ -56,7 +56,7 @@ public class UserController {
         User newUser = new User(address, UserType.CUSTOMER, data.name(), data.email(), data.password(), encodedPassword, updatedAt,
                 data.login(), typeUserRole);
 
-        usuarioService.registerUser(newUser);
+        userService.registerUser(newUser);
 
         return ResponseEntity.ok().build();
     }
@@ -74,7 +74,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers(@RequestParam("page") int page, @RequestParam("size") int size) {
-        var allUsers = this.usuarioService.findAllUsers(page, size).getContent();
+        var allUsers = this.userService.findAllUsers(page, size).getContent();
         return ResponseEntity.ok(allUsers);
     }
 
@@ -83,7 +83,7 @@ public class UserController {
             @RequestBody ChangePasswordDTO passwordDTO,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        Optional<User> foundUser = usuarioService.extractUserSubject(authorizationHeader);
+        Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
 
         if (passwordDTO.currentPassword() == null || passwordDTO.currentPassword().isBlank()) {
             return ResponseEntity.badRequest().body("Password is required.");
@@ -98,22 +98,28 @@ public class UserController {
         }
 
         try {
-            usuarioService.updatePassword(foundUser.get().getId(), passwordDTO);
+            userService.updatePassword(foundUser.get().getId(), passwordDTO);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
-        this.usuarioService.updateUser(user, id);
+    @PutMapping()
+    public ResponseEntity<Void> updateUser(
+            @RequestBody UpdateUserDTO user,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
+        this.userService.updateUser(user, foundUser.get().getId());
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
-        this.usuarioService.delete(id);
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String authorizationHeader
+    ) {
+        Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
+        this.userService.delete(foundUser.get().getId());
         return ResponseEntity.ok().build();
     }
 }

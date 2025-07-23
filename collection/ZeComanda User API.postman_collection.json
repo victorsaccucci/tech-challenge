@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "b115f8e0-6c17-4cfd-a246-e8f587a4fda3",
+		"_postman_id": "2974afab-d9ee-4091-a5e1-1afc8a317ce9",
 		"name": "ZeComanda User API",
 		"description": "Collection of requests for ZeComanda system user endpoints. ZeComanda is a Spring Boot project with database, MVC architecture and RESTful API, created for the Tech Challenge of the Postgraduate course in Java Architecture and Development. The system is named ZeComanda and, at this first stage, implements CRUD for users (clients). In the next steps, CRUD for managers will also be created.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "45910171"
+		"_exporter_id": "15464134"
 	},
 	"item": [
 		{
@@ -70,7 +70,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senhaSegura123\"\n}"
+					"raw": "{\n  \"login\": \"adriely\",\n  \"password\": \"1234\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/user/login",
@@ -140,6 +140,16 @@
 		{
 			"name": "Change Password",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2dpbi1hdXRoLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3NTMyMzM3MjR9.vTCitCMuOUhEZ9jN-d0j5sEjj8ltdF_LTn2UXk8AmwU",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -153,15 +163,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"currentPassword\": \"123456\",\n  \"newPassword\": \"654321\",\n  \"confirmationPassword\": \"654321\"\n}"
+					"raw": "{\n  \"currentPassword\": \"123\",\n  \"newPassword\": \"1234\",\n  \"confirmationPassword\": \"1234\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/user/change-password",
+					"raw": "http://localhost:8080/api/v1/user/change-password",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -175,6 +185,16 @@
 		{
 			"name": "Update User",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2dpbi1hdXRoLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3NTMyMzQwMDl9.0m5a1iEPhOrUIUPysZsHO3eG_8Oa1TQFU3VIvlabhIM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -188,20 +208,19 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"id\": 1,\n  \"address\": {\n    \"street\": \"New Street\",\n    \"neighborhood\": \"Downtown\",\n    \"city\": \"São Paulo\",\n    \"number\": \"456\",\n    \"state\": \"SP\",\n    \"country\": \"Brazil\"\n  },\n  \"name\": \"John Silva\",\n  \"email\": \"john@email.com\",\n  \"phoneNumber\": \"11999999999\",\n  \"password\": \"654321\",\n  \"login\": \"johnsilva\"\n}"
+					"raw": "{\n    \"id\": 1,\n    \"name\": \"John Silvasss\",\n    \"email\": \"john.silva3@example.com\",\n    \"phoneNumber\": \"+55 48 91234-5678\",\n    \"password\": \"123\",\n    \"updatedAt\": \"2025-07-15T18:30:00\",\n    \"login\": \"adriely\",\n    \"role\": \"USER\",\n    \"enumType\": \"DEFAULT\",\n    \"address\": {\n        \"street\": \"Camellias Street\",\n        \"neighborhood\": \"Trindade\",\n        \"city\": \"Florianópolis\",\n        \"number\": \"456\",\n        \"state\": \"SC\",\n        \"country\": \"Brazil\"\n    }\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/user/1",
+					"raw": "http://localhost:8080/api/v1/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"v1",
-						"user",
-						"1"
+						"user"
 					]
 				}
 			},
@@ -210,6 +229,16 @@
 		{
 			"name": "Delete User",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2dpbi1hdXRoLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3NTMyMzQ4Nzd9.amakXVvElEcEza-lPeP-QFf_uA7HFxkEzS7ZYofaVfI",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [
 					{
@@ -218,17 +247,16 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8081/api/v1/user/1",
+					"raw": "http://localhost:8080/api/v1/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"api",
 						"v1",
-						"user",
-						"1"
+						"user"
 					]
 				}
 			},
