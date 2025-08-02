@@ -19,7 +19,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Tech Challenge FIAP")
-                        .description("ZeComanda - Simple user management system with basic CRUD operations.")
+                        .description("ZeComanda - Plataforma prática para administrar e gerenciar usuários com facilidade.")
                         .version("v0.0.1"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new io.swagger.v3.oas.models.Components()

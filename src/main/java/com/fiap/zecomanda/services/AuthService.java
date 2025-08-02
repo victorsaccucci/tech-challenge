@@ -45,7 +45,6 @@ public class AuthService {
                 UserRole.USER
         );
 
-
         userRepository.save(newUser);
     }
 
