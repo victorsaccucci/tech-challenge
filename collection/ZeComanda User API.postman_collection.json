@@ -1,10 +1,11 @@
 {
 	"info": {
-		"_postman_id": "2974afab-d9ee-4091-a5e1-1afc8a317ce9",
+		"_postman_id": "6c93fb3e-5303-4df7-82d0-ba4780b80b35",
 		"name": "ZeComanda User API",
 		"description": "Collection of requests for ZeComanda system user endpoints. ZeComanda is a Spring Boot project with database, MVC architecture and RESTful API, created for the Tech Challenge of the Postgraduate course in Java Architecture and Development. The system is named ZeComanda and, at this first stage, implements CRUD for users (clients). In the next steps, CRUD for managers will also be created.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15464134"
+		"_exporter_id": "5338485",
+		"_collection_link": "https://ze-comanda.postman.co/workspace/private-workspace~9d6a29a5-de4f-49af-8bed-1bb747e1ad88/collection/5338485-6c93fb3e-5303-4df7-82d0-ba4780b80b35?action=share&source=collection_link&creator=5338485"
 	},
 	"item": [
 		{

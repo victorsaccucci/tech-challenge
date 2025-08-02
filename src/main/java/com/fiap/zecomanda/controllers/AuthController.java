@@ -4,7 +4,7 @@ import com.fiap.zecomanda.common.config.swagger.openapi.controller.AuthApi;
 import com.fiap.zecomanda.dto.AuthenticationDTO;
 import com.fiap.zecomanda.dto.ChangePasswordDTO;
 import com.fiap.zecomanda.dto.LoginResponseDTO;
-import com.fiap.zecomanda.dto.RegisterUserDTO;
+import com.fiap.zecomanda.dto.RequestUserDTO;
 import com.fiap.zecomanda.services.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
 
-    public ResponseEntity<?> registerUser(@RequestBody RegisterUserDTO data) {
+    public ResponseEntity<?> registerUser(@RequestBody RequestUserDTO data) {
         try {
             authService.registerUser(data);
             return ResponseEntity.status(HttpStatus.CREATED).build();

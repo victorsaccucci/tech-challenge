@@ -2,13 +2,13 @@ package com.fiap.zecomanda.common.config.swagger.openapi.controller;
 
 import com.fiap.zecomanda.dto.AuthenticationDTO;
 import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.dto.RegisterUserDTO;
+import com.fiap.zecomanda.dto.RequestUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public interface AuthApi {
     @PostMapping("/register")
     ResponseEntity<?> registerUser(
             @Parameter(description = "Dados do novo usuário", required = true)
-            RegisterUserDTO data
+            @Valid RequestUserDTO data
     );
 
     @Operation(summary = "Login de usuário", description = "Autentica o usuário e retorna um token JWT.")
