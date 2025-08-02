@@ -34,10 +34,14 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String password;
     private String updatedAt;
+
+    @Column(unique = true)
     private String login;
+
     private UserRole role;
 
-    public User(Address address, UserType userType, String name, String email, String phoneNumber, String password, String updatedAt, String login, UserRole role) {
+    public User(Address address, UserType userType, String name, String email, String phoneNumber,
+                String password, String updatedAt, String login, UserRole role) {
         this.address = address;
         this.userType = userType;
         this.name = name;

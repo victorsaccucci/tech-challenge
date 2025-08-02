@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"John Silva\",\n  \"email\": \"john.silva3@example.com\",\n  \"phoneNumber\": \"+55 48 91234-5678\",\n  \"password\": \"securePassword123\",\n  \"updatedAt\": \"2025-07-15T18:30:00\",\n  \"login\": \"johnsilva\",\n  \"role\": \"USER\",\n  \"enumType\": \"DEFAULT\",\n  \"address\": {\n    \"street\": \"Camellias Street\",\n    \"neighborhood\": \"Trindade\",\n    \"city\": \"Florianópolis\",\n    \"number\": \"456\",\n    \"state\": \"SC\",\n    \"country\": \"Brazil\"\n  }\n}",
+					"raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@fiap.com\",\n  \"phoneNumber\": \"+55 11 91234-5678\",\n  \"login\": \"adriely\",\n  \"password\": \"123\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"number\": \"123\",\n    \"state\": \"SP\",\n    \"country\": \"Brasil\"\n  }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -27,7 +27,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/user/register",
+					"raw": "http://localhost:8080/api/v1/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -36,7 +36,7 @@
 					"path": [
 						"api",
 						"v1",
-						"user",
+						"auth",
 						"register"
 					]
 				}
@@ -70,10 +70,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"login\": \"adriely\",\n  \"password\": \"1234\"\n}"
+					"raw": "{\n  \"login\": \"adriely\",\n  \"password\": \"123\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/user/login",
+					"raw": "http://localhost:8080/api/v1/auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -82,7 +82,7 @@
 					"path": [
 						"api",
 						"v1",
-						"user",
+						"auth",
 						"login"
 					]
 				}
@@ -112,7 +112,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/user?page=0&size=10",
+					"raw": "http://localhost:8080/api/v1/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -122,16 +122,6 @@
 						"api",
 						"v1",
 						"user"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
-						},
-						{
-							"key": "size",
-							"value": "10"
-						}
 					]
 				}
 			},
@@ -145,7 +135,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2dpbi1hdXRoLWFwaSIsInN1YiI6IjEiLCJleHAiOjE3NTMyMzM3MjR9.vTCitCMuOUhEZ9jN-d0j5sEjj8ltdF_LTn2UXk8AmwU",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2dpbi1hdXRoLWFwaSIsInN1YiI6IjYiLCJleHAiOjE3NTQxNDIwOTN9.emB3dHiVrGiw6Rm_-f66l34x4YYB2JAyfLZcGqZLoek",
 							"type": "string"
 						}
 					]
@@ -166,7 +156,7 @@
 					"raw": "{\n  \"currentPassword\": \"123\",\n  \"newPassword\": \"1234\",\n  \"confirmationPassword\": \"1234\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/user/change-password",
+					"raw": "http://localhost:8080/api/v1/auth/change-password",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -175,7 +165,7 @@
 					"path": [
 						"api",
 						"v1",
-						"user",
+						"auth",
 						"change-password"
 					]
 				}
@@ -208,7 +198,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": 1,\n    \"name\": \"John Silvasss\",\n    \"email\": \"john.silva3@example.com\",\n    \"phoneNumber\": \"+55 48 91234-5678\",\n    \"password\": \"123\",\n    \"updatedAt\": \"2025-07-15T18:30:00\",\n    \"login\": \"adriely\",\n    \"role\": \"USER\",\n    \"enumType\": \"DEFAULT\",\n    \"address\": {\n        \"street\": \"Camellias Street\",\n        \"neighborhood\": \"Trindade\",\n        \"city\": \"Florianópolis\",\n        \"number\": \"456\",\n        \"state\": \"SC\",\n        \"country\": \"Brazil\"\n    }\n}"
+					"raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva3@fiap.com\",\n  \"phoneNumber\": \"+55 11 91234-5678\",\n  \"login\": \"joao\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/v1/user",
