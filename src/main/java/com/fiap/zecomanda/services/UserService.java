@@ -50,7 +50,6 @@ public class UserService {
                     return new UserDtoApi(
                             user.getId(),
                             user.getLogin(),
-                            user.getPassword(),
                             user.getName(),
                             user.getEmail(),
                             user.getPhoneNumber(),
