@@ -7,7 +7,9 @@ import com.fiap.zecomanda.dto.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,9 +67,20 @@ public class UserService {
             throw new IllegalArgumentException("Token inválido ou ausente");
         }
 
-        String token = tokenHeader.substring(7);
+        String token = tokenHeader.replace("Bearer ", "");
         String subjectLogin = tokenService.extractSubject(token);
         return userRepository.findById(Long.valueOf(subjectLogin));
+    }
+
+    public boolean checkUserRoleAdmin(String authorizationHeader) {
+
+        Optional<User> user = extractUserSubject(authorizationHeader);
+
+        if (!"ADMIN".equalsIgnoreCase(String.valueOf(user.get().getRole()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso negado: apenas gerentes podem acessar essa rota.");
+        }
+
+        return true;
     }
 
 }
