@@ -6,7 +6,7 @@ import com.fiap.zecomanda.common.security.TokenService;
 import com.fiap.zecomanda.dto.AuthenticationDTO;
 import com.fiap.zecomanda.dto.ChangePasswordDTO;
 import com.fiap.zecomanda.dto.LoginResponseDTO;
-import com.fiap.zecomanda.dto.RegisterUserDTO;
+import com.fiap.zecomanda.dto.RequestUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,11 +25,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    public void registerUser(RegisterUserDTO data) {
-        if (userRepository.findByLogin(data.login()).isPresent()) {
-            throw new RuntimeException("Usuário já cadastrado com este login.");
-        }
-
+    public void registerUser(RequestUserDTO data) {
         String encodedPassword = passwordEncoder.encode(data.password());
         String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
