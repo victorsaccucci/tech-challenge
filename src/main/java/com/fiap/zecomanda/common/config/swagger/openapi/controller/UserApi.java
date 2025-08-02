@@ -1,0 +1,51 @@
+package com.fiap.zecomanda.common.config.swagger.openapi.controller;
+
+import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
+import com.fiap.zecomanda.dto.UpdateUserDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequestMapping("api/v1/user")
+@Tag(name = "Usuários")
+public interface UserApi {
+
+    @Operation(summary = "Listar usuários cadastrados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200")
+    })
+    @GetMapping()
+    ResponseEntity<List<UserDtoApi>> getUsers();
+
+    @Operation(summary = "Atualizar dados do usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    })
+    @PutMapping()
+    ResponseEntity<Void> updateUser(
+            UpdateUserDTO user,
+
+            @RequestHeader("Authorization")
+            @Parameter(hidden = true)
+            String authorizationHeader
+    );
+
+    @Operation(summary = "Deletar usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    @DeleteMapping()
+    ResponseEntity<Void> deleteUser(
+            @RequestHeader("Authorization")
+            @Parameter(hidden = true)
+            String authorizationHeader
+    );
+}
