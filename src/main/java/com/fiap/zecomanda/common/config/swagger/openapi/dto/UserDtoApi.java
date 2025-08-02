@@ -11,9 +11,6 @@ public record UserDtoApi(
         @Schema(example = "joaosilva")
         String login,
 
-        @Schema(example = "123")
-        String password,
-
         @Schema(example = "João Silva")
         String name,
 

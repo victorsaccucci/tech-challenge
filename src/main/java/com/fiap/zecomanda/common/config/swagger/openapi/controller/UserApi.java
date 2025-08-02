@@ -21,7 +21,11 @@ public interface UserApi {
             @ApiResponse(responseCode = "200")
     })
     @GetMapping()
-    ResponseEntity<List<UserDtoApi>> getUsers();
+    ResponseEntity<?> getUsers(
+            @RequestHeader("Authorization")
+            @Parameter(hidden = true)
+            String authorizationHeader
+    );
 
     @Operation(summary = "Atualizar dados do usuário")
     @ApiResponses(value = {
@@ -31,7 +35,6 @@ public interface UserApi {
     @PutMapping()
     ResponseEntity<Void> updateUser(
             UpdateUserDTO user,
-
             @RequestHeader("Authorization")
             @Parameter(hidden = true)
             String authorizationHeader

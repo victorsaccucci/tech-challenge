@@ -1,5 +1,6 @@
 package com.fiap.zecomanda.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.zecomanda.common.consts.UserRole;
 import com.fiap.zecomanda.common.consts.UserType;
 import jakarta.persistence.*;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String phoneNumber;
+    @JsonIgnore
     private String password;
     private String updatedAt;
 
