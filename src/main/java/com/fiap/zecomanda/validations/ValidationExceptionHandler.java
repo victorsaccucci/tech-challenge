@@ -30,7 +30,7 @@ public class ValidationExceptionHandler {
         resposta.put("status", HttpStatus.BAD_REQUEST.value());
         resposta.put("error", "validation error");
         resposta.put("path", request.getRequestURI());
-        resposta.put("fiels", errors);
+        resposta.put("fields", errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
     }
