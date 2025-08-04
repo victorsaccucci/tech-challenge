@@ -22,7 +22,7 @@ public class ValidationExceptionHandler {
 
         Map<String, String> erros = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(erro ->
-                erros.put(erro.getField(), "inválido")
+                erros.put(erro.getField(), erro.getDefaultMessage())
         );
 
         Map<String, Object> resposta = new HashMap<>();

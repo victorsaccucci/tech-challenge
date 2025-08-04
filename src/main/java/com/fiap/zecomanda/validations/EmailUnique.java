@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmailUnique {
 
-    String message() default "E-mail inválido";
+    String message() default "E-mail already registered";
 
     Class<?>[] groups() default {};
 

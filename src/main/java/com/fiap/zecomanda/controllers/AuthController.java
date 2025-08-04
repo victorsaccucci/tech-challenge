@@ -34,8 +34,7 @@ public class AuthController implements AuthApi {
             LoginResponseDTO response = authService.login(authBody);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body((e.getMessage()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((e.getMessage()));
         }
     }
 

@@ -45,8 +45,9 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(AuthenticationDTO authBody) {
-        User user = this.userRepository.findByLogin(authBody.login())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+        User user = this.userRepository.findByLogin(authBody.login()).orElseThrow(
+                () -> new RuntimeException("Invalid credentials")
+        );
         if (passwordEncoder.matches(authBody.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
             return new LoginResponseDTO(token, "Login succeeded.");
