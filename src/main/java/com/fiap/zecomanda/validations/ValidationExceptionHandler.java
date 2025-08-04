@@ -15,22 +15,22 @@ import java.util.Map;
 public class ValidationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidacoes(
+    public ResponseEntity<Map<String, Object>> handlerValidation(
         MethodArgumentNotValidException ex,
         HttpServletRequest request
     ) {
 
-        Map<String, String> erros = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(erro ->
-                erros.put(erro.getField(), erro.getDefaultMessage())
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            errors.put(error.getField(), error.getDefaultMessage())
         );
 
         Map<String, Object> resposta = new HashMap<>();
         resposta.put("timestamp", LocalDateTime.now());
         resposta.put("status", HttpStatus.BAD_REQUEST.value());
-        resposta.put("erro", "Erro de validação");
-        resposta.put("caminho", request.getRequestURI());
-        resposta.put("campos", erros);
+        resposta.put("error", "validation error");
+        resposta.put("path", request.getRequestURI());
+        resposta.put("fiels", errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
     }
