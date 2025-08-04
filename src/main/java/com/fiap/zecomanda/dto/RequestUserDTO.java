@@ -4,6 +4,7 @@ import com.fiap.zecomanda.entities.Address;
 import com.fiap.zecomanda.validations.EmailUnique;
 import com.fiap.zecomanda.validations.LoginUnique;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -17,6 +18,7 @@ public record RequestUserDTO(
         @Schema(example = "joao.silva@fiap.com")
         @NotNull
         @Size(min = 3)
+        @Email
         @EmailUnique
         String email,
 

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LoginUnique {
 
-    String message() default "Login inválido";
+    String message() default "Login invalid";
 
     Class<?>[] groups() default {};
 
