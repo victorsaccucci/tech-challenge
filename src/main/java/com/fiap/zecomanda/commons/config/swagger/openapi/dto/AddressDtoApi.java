@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.config.swagger.openapi.dto;
+package com.fiap.zecomanda.commons.config.swagger.openapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

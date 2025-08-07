@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.validations;
+package com.fiap.zecomanda.commons.validations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,12 +6,12 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = LoginUniqueValidator.class)
+@Constraint(validatedBy = EmailUniqueValidator.class)
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LoginUnique {
+public @interface EmailUnique {
 
-    String message() default "Login invalid";
+    String message() default "E-mail already registered";
 
     Class<?>[] groups() default {};
 

@@ -1,8 +1,8 @@
 package com.fiap.zecomanda.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fiap.zecomanda.common.consts.UserRole;
-import com.fiap.zecomanda.common.consts.UserType;
+import com.fiap.zecomanda.commons.consts.UserRole;
+import com.fiap.zecomanda.commons.consts.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

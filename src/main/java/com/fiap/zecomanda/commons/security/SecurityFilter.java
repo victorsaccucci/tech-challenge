@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.security;
+package com.fiap.zecomanda.commons.security;
 
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;

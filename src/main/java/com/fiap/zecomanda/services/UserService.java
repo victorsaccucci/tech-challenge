@@ -1,8 +1,8 @@
 package com.fiap.zecomanda.services;
 
-import com.fiap.zecomanda.common.config.swagger.openapi.dto.AddressDtoApi;
-import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
-import com.fiap.zecomanda.common.security.TokenService;
+import com.fiap.zecomanda.commons.config.swagger.openapi.dto.AddressDtoApi;
+import com.fiap.zecomanda.commons.config.swagger.openapi.dto.UserDtoApi;
+import com.fiap.zecomanda.commons.security.TokenService;
 import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;

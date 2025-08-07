@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.security;
+package com.fiap.zecomanda.commons.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

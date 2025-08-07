@@ -1,6 +1,6 @@
 package com.fiap.zecomanda.controllers;
 
-import com.fiap.zecomanda.common.config.swagger.openapi.controller.AuthApi;
+import com.fiap.zecomanda.commons.config.swagger.openapi.controller.AuthApi;
 import com.fiap.zecomanda.dtos.AuthenticationDTO;
 import com.fiap.zecomanda.dtos.ChangePasswordDTO;
 import com.fiap.zecomanda.dtos.LoginResponseDTO;

@@ -1,16 +1,16 @@
 package com.fiap.zecomanda.services;
 
-import com.fiap.zecomanda.common.consts.UserRole;
-import com.fiap.zecomanda.common.consts.UserType;
-import com.fiap.zecomanda.common.security.TokenService;
+import com.fiap.zecomanda.commons.consts.UserRole;
+import com.fiap.zecomanda.commons.consts.UserType;
+import com.fiap.zecomanda.commons.security.TokenService;
 import com.fiap.zecomanda.dtos.AuthenticationDTO;
 import com.fiap.zecomanda.dtos.ChangePasswordDTO;
 import com.fiap.zecomanda.dtos.LoginResponseDTO;
 import com.fiap.zecomanda.dtos.RequestUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
-import com.fiap.zecomanda.services.exceptions.ResourceAlreadyExistsException;
-import com.fiap.zecomanda.services.exceptions.UnauthorizedAccessException;
+import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
+import com.fiap.zecomanda.commons.exceptions.UnauthorizedAccessException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.services.exceptions;
+package com.fiap.zecomanda.commons.exceptions;
 
 public class ResourceAlreadyExistsException extends RuntimeException {
     public ResourceAlreadyExistsException(String message) {

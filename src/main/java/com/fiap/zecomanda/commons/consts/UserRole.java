@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.consts;
+package com.fiap.zecomanda.commons.consts;
 
 public enum UserRole {
     ADMIN("admin"),

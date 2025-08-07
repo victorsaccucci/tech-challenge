@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.validations;
+package com.fiap.zecomanda.commons.validations;
 
 import com.fiap.zecomanda.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;

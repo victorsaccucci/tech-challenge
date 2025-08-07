@@ -1,8 +1,6 @@
 package com.fiap.zecomanda.dtos;
 
 import com.fiap.zecomanda.entities.Address;
-import com.fiap.zecomanda.validations.EmailUnique;
-import com.fiap.zecomanda.validations.LoginUnique;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
