@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.dto;
+package com.fiap.zecomanda.dtos;
 
 public record LoginResponseDTO(String token, String message) {
 }

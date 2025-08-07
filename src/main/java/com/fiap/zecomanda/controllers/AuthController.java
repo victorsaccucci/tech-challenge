@@ -1,43 +1,36 @@
 package com.fiap.zecomanda.controllers;
 
 import com.fiap.zecomanda.common.config.swagger.openapi.controller.AuthApi;
-import com.fiap.zecomanda.dto.AuthenticationDTO;
-import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.dto.LoginResponseDTO;
-import com.fiap.zecomanda.dto.RequestUserDTO;
+import com.fiap.zecomanda.dtos.AuthenticationDTO;
+import com.fiap.zecomanda.dtos.ChangePasswordDTO;
+import com.fiap.zecomanda.dtos.LoginResponseDTO;
+import com.fiap.zecomanda.dtos.RequestUserDTO;
 import com.fiap.zecomanda.services.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/v1/auth")
 public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
-
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RequestUserDTO data) {
-        try {
-            authService.registerUser(data);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+        authService.registerUser(data);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<?> login(@RequestBody AuthenticationDTO authBody) {
-        try {
-            LoginResponseDTO response = authService.login(authBody);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((e.getMessage()));
-        }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO authBody) {
+        LoginResponseDTO response = authService.login(authBody);
+        return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @RequestBody ChangePasswordDTO passwordDTO,
             @RequestHeader("Authorization") String authorizationHeader

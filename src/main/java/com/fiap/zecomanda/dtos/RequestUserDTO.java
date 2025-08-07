@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.dto;
+package com.fiap.zecomanda.dtos;
 
 import com.fiap.zecomanda.entities.Address;
 import com.fiap.zecomanda.validations.EmailUnique;
@@ -19,7 +19,6 @@ public record RequestUserDTO(
         @NotNull
         @Size(min = 3)
         @Email
-        @EmailUnique
         String email,
 
         @Schema(example = "+55 11 91234-5678")
@@ -30,7 +29,6 @@ public record RequestUserDTO(
         @Schema(example = "joao")
         @NotNull
         @Size(min = 3)
-        @LoginUnique
         String login,
 
         @Schema(example = "123")

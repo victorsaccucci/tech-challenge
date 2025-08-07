@@ -3,7 +3,7 @@ package com.fiap.zecomanda.services;
 import com.fiap.zecomanda.common.config.swagger.openapi.dto.AddressDtoApi;
 import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
 import com.fiap.zecomanda.common.security.TokenService;
-import com.fiap.zecomanda.dto.UpdateUserDTO;
+import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import lombok.AllArgsConstructor;

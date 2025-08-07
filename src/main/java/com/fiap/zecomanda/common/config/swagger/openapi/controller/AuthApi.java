@@ -1,8 +1,8 @@
 package com.fiap.zecomanda.common.config.swagger.openapi.controller;
 
-import com.fiap.zecomanda.dto.AuthenticationDTO;
-import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.dto.RequestUserDTO;
+import com.fiap.zecomanda.dtos.AuthenticationDTO;
+import com.fiap.zecomanda.dtos.ChangePasswordDTO;
+import com.fiap.zecomanda.dtos.RequestUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

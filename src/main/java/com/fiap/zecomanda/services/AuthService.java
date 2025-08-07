@@ -3,12 +3,14 @@ package com.fiap.zecomanda.services;
 import com.fiap.zecomanda.common.consts.UserRole;
 import com.fiap.zecomanda.common.consts.UserType;
 import com.fiap.zecomanda.common.security.TokenService;
-import com.fiap.zecomanda.dto.AuthenticationDTO;
-import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.dto.LoginResponseDTO;
-import com.fiap.zecomanda.dto.RequestUserDTO;
+import com.fiap.zecomanda.dtos.AuthenticationDTO;
+import com.fiap.zecomanda.dtos.ChangePasswordDTO;
+import com.fiap.zecomanda.dtos.LoginResponseDTO;
+import com.fiap.zecomanda.dtos.RequestUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
+import com.fiap.zecomanda.services.exceptions.ResourceAlreadyExistsException;
+import com.fiap.zecomanda.services.exceptions.UnauthorizedAccessException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,9 +27,18 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
+    public boolean resourceExists(String login, String email) {
+        return userRepository.findByLogin(login).isPresent() ||
+                userRepository.findByEmail(email).isPresent();
+    }
+
     public void registerUser(RequestUserDTO data) {
         String encodedPassword = passwordEncoder.encode(data.password());
         String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        if (resourceExists(data.login(), data.email())) {
+            throw new ResourceAlreadyExistsException("Login or email already exists."); // mensagem só para logs
+        }
 
         User newUser = new User(
                 data.address(),
@@ -45,14 +56,15 @@ public class AuthService {
     }
 
     public LoginResponseDTO login(AuthenticationDTO authBody) {
-        User user = this.userRepository.findByLogin(authBody.login()).orElseThrow(
-                () -> new RuntimeException("Invalid credentials")
-        );
+        User user = this.userRepository.findByLogin(authBody.login())
+                .orElseThrow(() -> new UnauthorizedAccessException("Invalid login or password."));
+
         if (passwordEncoder.matches(authBody.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
             return new LoginResponseDTO(token, "Login succeeded.");
         }
-        throw new RuntimeException("Invalid credentials");
+
+        throw new UnauthorizedAccessException("Invalid login or password.");
     }
 
     public void changePassword(ChangePasswordDTO passwordDTO, String tokenHeader) {

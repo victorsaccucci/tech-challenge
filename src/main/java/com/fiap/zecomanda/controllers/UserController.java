@@ -2,7 +2,7 @@ package com.fiap.zecomanda.controllers;
 
 import com.fiap.zecomanda.common.config.swagger.openapi.controller.UserApi;
 import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
-import com.fiap.zecomanda.dto.UpdateUserDTO;
+import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.services.UserService;
 import lombok.AllArgsConstructor;
@@ -35,7 +35,6 @@ public class UserController implements UserApi {
             return ResponseEntity.status(ex.getStatusCode()).body(erro);
         }
     }
-
 
     public ResponseEntity<Void> updateUser(
             @RequestBody UpdateUserDTO user,

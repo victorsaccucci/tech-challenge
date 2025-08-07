@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.dto;
+package com.fiap.zecomanda.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
