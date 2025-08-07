@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/auth/change-password").permitAll()
