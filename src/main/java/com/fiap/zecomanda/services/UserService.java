@@ -64,7 +64,7 @@ public class UserService {
     public Optional<User> extractUserSubject(String tokenHeader) {
 
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Token inválido ou ausente");
+            throw new IllegalArgumentException("Invalid or missing token");
         }
 
         String token = tokenHeader.replace("Bearer ", "");
@@ -77,7 +77,7 @@ public class UserService {
         Optional<User> user = extractUserSubject(authorizationHeader);
 
         if (!"ADMIN".equalsIgnoreCase(String.valueOf(user.get().getRole()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso negado: apenas gerentes podem acessar essa rota.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied: Only managers can access this route.");
         }
 
         return true;
