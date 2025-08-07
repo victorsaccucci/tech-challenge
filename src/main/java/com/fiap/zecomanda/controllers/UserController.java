@@ -5,6 +5,8 @@ import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
 import com.fiap.zecomanda.dto.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.services.UserService;
+
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +40,7 @@ public class UserController implements UserApi {
 
 
     public ResponseEntity<Void> updateUser(
-            @RequestBody UpdateUserDTO user,
+            @RequestBody @Valid UpdateUserDTO user,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
