@@ -2,7 +2,6 @@ package com.fiap.zecomanda.controllers.handlers;
 
 import com.fiap.zecomanda.services.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.services.exceptions.UnauthorizedAccessException;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
