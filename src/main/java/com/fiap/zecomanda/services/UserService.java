@@ -22,8 +22,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
 
-    public void updateUser(UpdateUserDTO user, Long id) {
-        var update = this.userRepository.updateUser(user.name(), user.email(), user.phoneNumber(), user.login(), id);
+    public void updateUser(UpdateUserDTO user) {
+        var update = this.userRepository.updateUser(user.name(), user.email(), user.phoneNumber(), user.login(), user.id());
         if (update == 0) {
             throw new RuntimeException("User not found");
         }

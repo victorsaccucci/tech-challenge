@@ -14,11 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
-                @UniqueConstraint(name = "uk_users_login", columnNames = "login")
-        })
+@Table(name = "users")
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "password")
 @NoArgsConstructor

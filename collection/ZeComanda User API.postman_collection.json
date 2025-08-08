@@ -18,7 +18,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@fiap.com\",\n  \"phoneNumber\": \"+55 11 91234-5678\",\n  \"login\": \"joaosilva\",\n  \"password\": \"123\",\n  \"userType\": \"MANAGER\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"São Paulo\",\n    \"number\": \"123\",\n    \"state\": \"SP\",\n    \"country\": \"Brasil\"\n  }\n}",
+					"raw": "{\n    \"name\": \"João Silva\",\n    \"email\": \"joao.silva@fiap.com\",\n    \"phoneNumber\": \"+55 11 91234-5678\",\n    \"login\": \"joaosilva\",\n    \"password\": \"123\",\n    \"userType\": \"MANAGER\",\n    \"address\": {\n        \"street\": \"Rua das Flores\",\n        \"neighborhood\": \"Centro\",\n        \"city\": \"São Paulo\",\n        \"number\": \"123\",\n        \"state\": \"SP\",\n        \"country\": \"Brasil\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,7 +67,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"123\"\n}",
+					"raw": "{\n    \"login\": \"joaosilva\",\n    \"password\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -103,7 +103,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"currentPassword\": \"123\",\n  \"newPassword\": \"1234\",\n  \"confirmationPassword\": \"1234\"\n}",
+					"raw": "{\n    \"currentPassword\": \"123\",\n    \"newPassword\": \"1234\",\n    \"confirmationPassword\": \"1234\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -169,7 +169,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"João Silvaaaaaaaaaaaa\",\n  \"email\": \"joao.silva3@fiap.com\",\n  \"phoneNumber\": \"+55 11 91234-5678\",\n  \"login\": \"joao\"\n}"
+					"raw": "{\n    \"id\": 2,\n    \"name\": \"João Silvabbbbbbbbbbbbbbbbbb\",\n    \"email\": \"joao.silva3@fiap.combbbbbbbbbbbbb\",\n    \"phoneNumber\": \"+55 11 91234-5678\",\n    \"login\": \"joao\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/v1/user",
