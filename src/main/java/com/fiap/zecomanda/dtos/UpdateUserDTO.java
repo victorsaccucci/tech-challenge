@@ -3,8 +3,13 @@ package com.fiap.zecomanda.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public record UpdateUserDTO(
+        @Schema(example = "1")
+        @NotNull
+        Long id,
+
         @Schema(example = "João Silva")
         @NotBlank
         String name,
@@ -20,6 +25,4 @@ public record UpdateUserDTO(
         @Schema(example = "joao")
         @NotBlank
         String login
-) {
-
-}
+) {}

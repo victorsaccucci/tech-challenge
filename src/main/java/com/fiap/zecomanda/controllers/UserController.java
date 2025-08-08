@@ -40,8 +40,8 @@ public class UserController implements UserApi {
             @RequestBody @Valid UpdateUserDTO user,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
-        this.userService.updateUser(user, foundUser.get().getId());
+        //Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
+        this.userService.updateUser(user);
         return ResponseEntity.ok().build();
     }
 
