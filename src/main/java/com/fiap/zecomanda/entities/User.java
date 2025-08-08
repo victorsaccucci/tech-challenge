@@ -47,6 +47,8 @@ public class User implements UserDetails {
 
     private LocalDateTime updatedAt;
 
+    private Boolean deleted = false;
+
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private UserType userType;
 

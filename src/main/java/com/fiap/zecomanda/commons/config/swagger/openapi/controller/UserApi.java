@@ -42,10 +42,9 @@ public interface UserApi {
             @ApiResponse(responseCode = "200", description = "Usuário deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    @DeleteMapping()
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteUser(
-            @RequestHeader("Authorization")
-            @Parameter(hidden = true)
-            String authorizationHeader
+            @RequestHeader("Authorization") @Parameter(hidden = true) String authorizationHeader,
+            @PathVariable Long id
     );
 }
