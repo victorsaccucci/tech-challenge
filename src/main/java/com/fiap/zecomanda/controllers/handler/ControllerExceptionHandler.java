@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.controllers.handlers;
+package com.fiap.zecomanda.controllers.handler;
 
 import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.commons.exceptions.UnauthorizedAccessException;
@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class ControllerExceptionHandler {
 
     // DTO inválido (@Valid no controller)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
     }
 
+<<<<<<< Updated upstream:src/main/java/com/fiap/zecomanda/controllers/handlers/GlobalExceptionHandler.java
     // Validator no Service (@Validated + ConstraintValidator) detonando
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, Object>> handleConstraint(
@@ -82,6 +84,23 @@ public class GlobalExceptionHandler {
     }
 
 
+=======
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handlerValidation(
+        HttpMessageNotReadableException ex,
+        HttpServletRequest request
+    ) {
+
+        Map<String, Object> resposta = new HashMap<>();
+        resposta.put("timestamp", LocalDateTime.now());
+        resposta.put("status", HttpStatus.BAD_REQUEST.value());
+        resposta.put("error", ex.getMessage());
+        resposta.put("path", request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+    }
+
+>>>>>>> Stashed changes:src/main/java/com/fiap/zecomanda/controllers/handler/ControllerExceptionHandler.java
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleResourceAlreadyExists(
             ResourceAlreadyExistsException ex,

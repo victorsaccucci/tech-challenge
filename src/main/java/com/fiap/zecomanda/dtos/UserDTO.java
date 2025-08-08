@@ -1,38 +1,35 @@
 package com.fiap.zecomanda.dtos;
 
+import com.fiap.zecomanda.commons.consts.UserType;
 import com.fiap.zecomanda.entities.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
-public record RequestUserDTO(
+public record UserDTO(
 
         @Schema(example = "João Silva")
-        @NotNull
-        @Size(min = 3)
+        @NotBlank
         String name,
 
         @Schema(example = "joao.silva@fiap.com")
-        @NotNull
-        @Size(min = 3)
+        @NotBlank
         @Email
         String email,
 
         @Schema(example = "+55 11 91234-5678")
-        @NotNull
-        @Size(min = 3)
+        @NotBlank
         String phoneNumber,
 
-        @Schema(example = "joao")
-        @NotNull
-        @Size(min = 3)
+        @Schema(example = "joaosilva")
+        @NotBlank
         String login,
 
-        @Schema(example = "123")
-        @NotNull
-        @Size(min = 3)
+        @Schema(example = "12345")
+        @NotBlank
         String password,
+
+        UserType userType,
 
         @Schema(example = """
                     {
@@ -45,6 +42,7 @@ public record RequestUserDTO(
                     }
                 """)
         @NotNull
+        @Valid
         Address address
 ) {
 }

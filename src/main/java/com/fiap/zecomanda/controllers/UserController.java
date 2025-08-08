@@ -27,7 +27,7 @@ public class UserController implements UserApi {
 
     public ResponseEntity<?> getUsers(@RequestHeader("Authorization") String authorizationHeader) {
         try {
-            userService.checkUserRoleAdmin(authorizationHeader);
+            //userService.checkUserRoleAdmin(authorizationHeader);
             List<UserDtoApi> usuarios = userService.findAllUsers();
             return ResponseEntity.ok(usuarios);
 

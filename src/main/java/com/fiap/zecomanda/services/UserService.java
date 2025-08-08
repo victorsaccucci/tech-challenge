@@ -2,6 +2,7 @@ package com.fiap.zecomanda.services;
 
 import com.fiap.zecomanda.commons.config.swagger.openapi.dto.AddressDtoApi;
 import com.fiap.zecomanda.commons.config.swagger.openapi.dto.UserDtoApi;
+import com.fiap.zecomanda.commons.consts.UserType;
 import com.fiap.zecomanda.commons.security.TokenService;
 import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
@@ -51,11 +52,12 @@ public class UserService {
                     }
                     return new UserDtoApi(
                             user.getId(),
-                            user.getLogin(),
                             user.getName(),
                             user.getEmail(),
                             user.getPhoneNumber(),
-                            user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null,
+                            user.getUserType(),
+                            user.getLogin(),
+                            user.getUpdatedAtFormated(),
                             addressDto);
                 })
                 .toList();
@@ -73,14 +75,12 @@ public class UserService {
     }
 
     public boolean checkUserRoleAdmin(String authorizationHeader) {
-
         Optional<User> user = extractUserSubject(authorizationHeader);
 
-        if (!"ADMIN".equalsIgnoreCase(String.valueOf(user.get().getRole()))) {
+        if (user.isEmpty() || UserType.MANAGER != user.get().getUserType()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied: Only managers can access this route.");
         }
 
         return true;
     }
-
 }

@@ -1,17 +1,15 @@
 package com.fiap.zecomanda.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fiap.zecomanda.commons.consts.UserRole;
 import com.fiap.zecomanda.commons.consts.UserType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,59 +21,53 @@ import java.util.List;
         })
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "password")
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Builder
 public class User implements UserDetails {
+
+    private static final DateTimeFormatter FORMAT_PATTERN = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
     private String name;
 
-    @Column(nullable = false)
     private String email;
 
     private String phoneNumber;
 
-    @JsonIgnore
-    private String password;
-    private LocalDateTime updatedAt;
-
     @Column(nullable = false, unique = true)
     private String login;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @JsonIgnore // serve para nao exibir a senha no response da api
+    private String password;
 
-    public User(Address address, UserType userType, String name, String email, String phoneNumber,
-                String password, LocalDateTime updatedAt, String login, UserRole role) {
-        this.address = address;
-        this.userType = userType;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.updatedAt = updatedAt;
-        this.login = login;
-        this.role = role;
-    }
+    private LocalDateTime updatedAt;
 
-    public User() {
-    }
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private UserType userType;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "adress_id")
+    private Address address;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN) {
+        if (this.userType == UserType.MANAGER) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
+    }
+
+    public String getUpdatedAtFormated() {
+        if (this.updatedAt == null) {
+            return "";
+        }
+        return FORMAT_PATTERN.format(this.updatedAt);
     }
 
     @Override

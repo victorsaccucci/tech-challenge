@@ -1,25 +1,17 @@
 package com.fiap.zecomanda.services;
 
-import com.fiap.zecomanda.commons.consts.UserRole;
-import com.fiap.zecomanda.commons.consts.UserType;
+import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.commons.security.TokenService;
-import com.fiap.zecomanda.commons.validations.EmailUnique;
-import com.fiap.zecomanda.commons.validations.LoginUnique;
-import com.fiap.zecomanda.dtos.AuthenticationDTO;
-import com.fiap.zecomanda.dtos.ChangePasswordDTO;
-import com.fiap.zecomanda.dtos.LoginResponseDTO;
-import com.fiap.zecomanda.dtos.RequestUserDTO;
+import com.fiap.zecomanda.dtos.*;
 import com.fiap.zecomanda.entities.Address;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.AddressRepository;
 import com.fiap.zecomanda.repositories.UserRepository;
 import com.fiap.zecomanda.commons.exceptions.UnauthorizedAccessException;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
@@ -35,56 +27,22 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    @Transactional
-    public void registerUser(@Valid RequestUserDTO data) {
-
-        // Validações de entrada do DTO já rodaram aqui (@NotBlank, @Email, etc.)
-
-        // Regras de negócio “de verdade” ficam aqui (ex.: política de senha, limites, etc.)
-        // if (!policyOk(data.password())) throw new OperationNotAllowedException(...);
-
-        String encodedPassword = passwordEncoder.encode(data.password());
-        LocalDateTime updatedAt = LocalDateTime.now();
-
-        // se vier sem id, salva; se vier com id, anexa a gerenciada
-        Address managedAddress = (data.address().getId() == null)
-                ? addressRepository.save(data.address())
-                : addressRepository.getReferenceById(data.address().getId());
-
-        // Aqui entram as validações do nosso amigo Mychel (únicas) NO SERVICE:
-
-
-        createUserWithValidatedParams(
-                managedAddress,
-                data.name(),
-                data.email(),   // @EmailUnique roda aqui
-                data.phoneNumber(),
-                encodedPassword,
-                updatedAt,
-                data.login()   // @LoginUnique roda aqui
-        );
+    public boolean resourceExists(String login, String email) {
+        return userRepository.findByLogin(login).isPresent() || userRepository.findByEmail(email).isPresent();
     }
 
-    void createUserWithValidatedParams(
-            Address address,
-            String name,
-            @EmailUnique String email,
-            String phoneNumber,
-            String encodedPassword,
-            LocalDateTime updatedAt,
-            @LoginUnique String login
-    ) {
-        User newUser = new User(
-                address,
-                UserType.CUSTOMER,
-                name,
-                email,
-                phoneNumber,
-                encodedPassword,
-                updatedAt,
-                login,
-                UserRole.USER
-        );
+    public void registerUser(UserDTO userDTO) {
+        if (resourceExists(userDTO.login(), userDTO.email())) {
+            throw new ResourceAlreadyExistsException("Login or email already exists.");
+        }
+
+        Address address = (userDTO.address().getId() == null)
+                ? addressRepository.save(userDTO.address())
+                : addressRepository.getReferenceById(userDTO.address().getId());
+
+        var newUser = User.builder().name(userDTO.name()).email(userDTO.email()).phoneNumber(userDTO.phoneNumber())
+                .login(userDTO.login()).password(passwordEncoder.encode(userDTO.password())).updatedAt(LocalDateTime.now())
+                .userType(userDTO.userType()).address(address).build();
 
         userRepository.save(newUser);
     }
@@ -102,26 +60,11 @@ public class AuthService {
     }
 
     public void changePassword(ChangePasswordDTO passwordDTO, String tokenHeader) {
-        if (passwordDTO.currentPassword() == null || passwordDTO.currentPassword().isBlank()) {
-            throw new IllegalArgumentException("Current password is required.");
-        }
-
-        if (passwordDTO.newPassword() == null || passwordDTO.newPassword().isBlank()) {
-            throw new IllegalArgumentException("New password is required.");
-        }
-
         if (!passwordDTO.newPassword().equals(passwordDTO.confirmationPassword())) {
             throw new IllegalArgumentException("Password confirmation does not match.");
         }
 
-        User user = extractUserSubject(tokenHeader)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
-
-        boolean validPassword = passwordEncoder.matches(passwordDTO.currentPassword(), user.getPassword());
-
-        if (!validPassword) {
-            throw new IllegalArgumentException("The current password is incorrect.");
-        }
+        User user = extractUserSubject(tokenHeader).orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         user.setPassword(passwordEncoder.encode(passwordDTO.newPassword()));
         userRepository.save(user);
