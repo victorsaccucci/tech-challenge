@@ -41,7 +41,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
     }
 
-<<<<<<< Updated upstream:src/main/java/com/fiap/zecomanda/controllers/handlers/GlobalExceptionHandler.java
     // Validator no Service (@Validated + ConstraintValidator) detonando
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, Object>> handleConstraint(
@@ -83,8 +82,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 
-
-=======
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handlerValidation(
         HttpMessageNotReadableException ex,
@@ -100,7 +97,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
     }
 
->>>>>>> Stashed changes:src/main/java/com/fiap/zecomanda/controllers/handler/ControllerExceptionHandler.java
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleResourceAlreadyExists(
             ResourceAlreadyExistsException ex,
