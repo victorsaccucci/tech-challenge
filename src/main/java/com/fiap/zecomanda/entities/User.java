@@ -6,16 +6,23 @@ import com.fiap.zecomanda.commons.consts.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_users_login", columnNames = "login")
+        })
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = "password")
 @Data
 public class User implements UserDetails {
 
@@ -23,27 +30,31 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "adress_id")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    @Enumerated(jakarta.persistence.EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private UserType userType;
-
     private String name;
+
+    @Column(nullable = false)
     private String email;
+
     private String phoneNumber;
+
     @JsonIgnore
     private String password;
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String login;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(Address address, UserType userType, String name, String email, String phoneNumber,
-                String password, String updatedAt, String login, UserRole role) {
+                String password, LocalDateTime updatedAt, String login, UserRole role) {
         this.address = address;
         this.userType = userType;
         this.name = name;

@@ -3,52 +3,86 @@ package com.fiap.zecomanda.services;
 import com.fiap.zecomanda.commons.consts.UserRole;
 import com.fiap.zecomanda.commons.consts.UserType;
 import com.fiap.zecomanda.commons.security.TokenService;
+import com.fiap.zecomanda.commons.validations.EmailUnique;
+import com.fiap.zecomanda.commons.validations.LoginUnique;
 import com.fiap.zecomanda.dtos.AuthenticationDTO;
 import com.fiap.zecomanda.dtos.ChangePasswordDTO;
 import com.fiap.zecomanda.dtos.LoginResponseDTO;
 import com.fiap.zecomanda.dtos.RequestUserDTO;
+import com.fiap.zecomanda.entities.Address;
 import com.fiap.zecomanda.entities.User;
+import com.fiap.zecomanda.repositories.AddressRepository;
 import com.fiap.zecomanda.repositories.UserRepository;
-import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.commons.exceptions.UnauthorizedAccessException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
+@Validated
 @AllArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    public boolean resourceExists(String login, String email) {
-        return userRepository.findByLogin(login).isPresent() ||
-                userRepository.findByEmail(email).isPresent();
-    }
+    @Transactional
+    public void registerUser(@Valid RequestUserDTO data) {
 
-    public void registerUser(RequestUserDTO data) {
+        // Validações de entrada do DTO já rodaram aqui (@NotBlank, @Email, etc.)
+
+        // Regras de negócio “de verdade” ficam aqui (ex.: política de senha, limites, etc.)
+        // if (!policyOk(data.password())) throw new OperationNotAllowedException(...);
+
         String encodedPassword = passwordEncoder.encode(data.password());
-        String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDateTime updatedAt = LocalDateTime.now();
 
-        if (resourceExists(data.login(), data.email())) {
-            throw new ResourceAlreadyExistsException("Login or email already exists."); // mensagem só para logs
-        }
+        // se vier sem id, salva; se vier com id, anexa a gerenciada
+        Address managedAddress = (data.address().getId() == null)
+                ? addressRepository.save(data.address())
+                : addressRepository.getReferenceById(data.address().getId());
 
-        User newUser = new User(
-                data.address(),
-                UserType.CUSTOMER,
+        // Aqui entram as validações do nosso amigo Mychel (únicas) NO SERVICE:
+
+
+        createUserWithValidatedParams(
+                managedAddress,
                 data.name(),
-                data.email(),
+                data.email(),   // @EmailUnique roda aqui
                 data.phoneNumber(),
                 encodedPassword,
                 updatedAt,
-                data.login(),
+                data.login()   // @LoginUnique roda aqui
+        );
+    }
+
+    void createUserWithValidatedParams(
+            Address address,
+            String name,
+            @EmailUnique String email,
+            String phoneNumber,
+            String encodedPassword,
+            LocalDateTime updatedAt,
+            @LoginUnique String login
+    ) {
+        User newUser = new User(
+                address,
+                UserType.CUSTOMER,
+                name,
+                email,
+                phoneNumber,
+                encodedPassword,
+                updatedAt,
+                login,
                 UserRole.USER
         );
 

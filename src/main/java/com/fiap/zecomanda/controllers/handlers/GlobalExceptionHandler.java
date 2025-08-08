@@ -3,6 +3,9 @@ package com.fiap.zecomanda.controllers.handlers;
 import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.commons.exceptions.UnauthorizedAccessException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,26 +19,68 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // DTO inválido (@Valid no controller)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handlerValidation(
-        MethodArgumentNotValidException ex,
-        HttpServletRequest request
+    public ResponseEntity<Map<String, Object>> handleDto(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request
     ) {
-
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-            errors.put(error.getField(), error.getDefaultMessage())
+        Map<String, String> fields = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(err ->
+                fields.put(err.getField(), err.getDefaultMessage())
         );
 
-        Map<String, Object> resposta = new HashMap<>();
-        resposta.put("timestamp", LocalDateTime.now());
-        resposta.put("status", HttpStatus.BAD_REQUEST.value());
-        resposta.put("error", "validation error");
-        resposta.put("path", request.getRequestURI());
-        resposta.put("fields", errors);
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNPROCESSABLE_ENTITY.value()); // 422
+        body.put("error", "validation error");
+        body.put("path", request.getRequestURI());
+        body.put("fields", fields);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
     }
+
+    // Validator no Service (@Validated + ConstraintValidator) detonando
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConstraint(
+            ConstraintViolationException ex,
+            HttpServletRequest request
+    ) {
+        Map<String, String> fields = new HashMap<>();
+        for (ConstraintViolation<?> v : ex.getConstraintViolations()) {
+            // propertyPath pode vir "createUserWithValidatedParams.arg2"
+            fields.put(v.getPropertyPath().toString(), v.getMessage());
+        }
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNPROCESSABLE_ENTITY.value()); // 422
+        body.put("error", "constraint violation");
+        body.put("path", request.getRequestURI());
+        body.put("fields", fields);
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleIntegrity(
+            DataIntegrityViolationException ex,
+            HttpServletRequest request
+    ) {
+        // log completo na aplicação (stack + constraint)
+        // (use logger ao invés de System.err em prod)
+        System.err.println("Integrity violation: " + ex.getMessage());
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message", "Registration failed. Please check your data.");
+        body.put("path", request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleResourceAlreadyExists(
