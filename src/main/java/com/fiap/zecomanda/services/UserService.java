@@ -30,10 +30,14 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        var delete = this.userRepository.delete(id);
-        if (delete == 0) {
+        var userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
             throw new RuntimeException("User not found");
         }
+        var user = userOptional.get();
+        user.setDeleted(true);
+        var delete = this.userRepository.save(user);
+        System.out.println(""+ delete);
     }
 
     public List<UserDtoApi> findAllUsers() {
@@ -58,6 +62,7 @@ public class UserService {
                             user.getUserType(),
                             user.getLogin(),
                             user.getUpdatedAtFormated(),
+                            user.getDeleted(),
                             addressDto);
                 })
                 .toList();

@@ -27,7 +27,9 @@ public record UserDtoApi(
         @Schema(example = "29-07-2025")
         String updatedAt,
 
+        @Schema(example = "false")
+        Boolean deleted,
+
         @Schema(description = "Endereço do usuário")
         AddressDtoApi address
-) {
-}
+) {}

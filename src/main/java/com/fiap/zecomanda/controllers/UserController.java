@@ -9,9 +9,7 @@ import com.fiap.zecomanda.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
@@ -48,10 +46,11 @@ public class UserController implements UserApi {
     }
 
     public ResponseEntity<Void> deleteUser(
-            @RequestHeader("Authorization") String authorizationHeader
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long id
     ) {
-        Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
-        this.userService.delete(foundUser.get().getId());
+        //Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
+        this.userService.delete(id);
         return ResponseEntity.ok().build();
     }
 }
