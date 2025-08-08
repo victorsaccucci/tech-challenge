@@ -1,9 +1,10 @@
 package com.fiap.zecomanda.services;
 
-import com.fiap.zecomanda.common.config.swagger.openapi.dto.AddressDtoApi;
-import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
-import com.fiap.zecomanda.common.security.TokenService;
-import com.fiap.zecomanda.dto.UpdateUserDTO;
+import com.fiap.zecomanda.commons.config.swagger.openapi.dto.AddressDtoApi;
+import com.fiap.zecomanda.commons.config.swagger.openapi.dto.UserDtoApi;
+import com.fiap.zecomanda.commons.consts.UserType;
+import com.fiap.zecomanda.commons.security.TokenService;
+import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -51,11 +52,12 @@ public class UserService {
                     }
                     return new UserDtoApi(
                             user.getId(),
-                            user.getLogin(),
                             user.getName(),
                             user.getEmail(),
                             user.getPhoneNumber(),
-                            user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null,
+                            user.getUserType(),
+                            user.getLogin(),
+                            user.getUpdatedAtFormated(),
                             addressDto);
                 })
                 .toList();
@@ -64,7 +66,7 @@ public class UserService {
     public Optional<User> extractUserSubject(String tokenHeader) {
 
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Token inválido ou ausente");
+            throw new IllegalArgumentException("Invalid or missing token");
         }
 
         String token = tokenHeader.replace("Bearer ", "");
@@ -73,14 +75,12 @@ public class UserService {
     }
 
     public boolean checkUserRoleAdmin(String authorizationHeader) {
-
         Optional<User> user = extractUserSubject(authorizationHeader);
 
-        if (!"ADMIN".equalsIgnoreCase(String.valueOf(user.get().getRole()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso negado: apenas gerentes podem acessar essa rota.");
+        if (user.isEmpty() || UserType.MANAGER != user.get().getUserType()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied: Only managers can access this route.");
         }
 
         return true;
     }
-
 }

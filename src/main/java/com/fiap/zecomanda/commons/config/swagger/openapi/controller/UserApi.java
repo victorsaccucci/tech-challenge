@@ -1,7 +1,6 @@
-package com.fiap.zecomanda.common.config.swagger.openapi.controller;
+package com.fiap.zecomanda.commons.config.swagger.openapi.controller;
 
-import com.fiap.zecomanda.common.config.swagger.openapi.dto.UserDtoApi;
-import com.fiap.zecomanda.dto.UpdateUserDTO;
+import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,8 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("api/v1/user")
 @Tag(name = "Usuários")

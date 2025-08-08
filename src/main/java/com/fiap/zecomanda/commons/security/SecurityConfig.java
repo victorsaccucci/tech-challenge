@@ -1,4 +1,4 @@
-package com.fiap.zecomanda.common.security;
+package com.fiap.zecomanda.commons.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,20 +25,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/auth/change-password").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/user").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**", "/swagger-ui.html").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
+                    /*.requestMatchers(HttpMethod.PATCH, "/api/v1/auth/change-password").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/user").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/user").permitAll()*/
+                    .anyRequest().authenticated()
+            )
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

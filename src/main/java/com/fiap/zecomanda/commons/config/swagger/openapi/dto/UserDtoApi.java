@@ -1,5 +1,6 @@
-package com.fiap.zecomanda.common.config.swagger.openapi.dto;
+package com.fiap.zecomanda.commons.config.swagger.openapi.dto;
 
+import com.fiap.zecomanda.commons.consts.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados do usuário")
@@ -7,9 +8,6 @@ public record UserDtoApi(
 
         @Schema(example = "1")
         Long id,
-
-        @Schema(example = "joaosilva")
-        String login,
 
         @Schema(example = "João Silva")
         String name,
@@ -20,10 +18,14 @@ public record UserDtoApi(
         @Schema(example = "11999999999")
         String phoneNumber,
 
+        @Schema(example = "COSTUMER")
+        UserType userType,
+
+        @Schema(example = "joaosilva")
+        String login,
 
         @Schema(example = "29-07-2025")
         String updatedAt,
-
 
         @Schema(description = "Endereço do usuário")
         AddressDtoApi address

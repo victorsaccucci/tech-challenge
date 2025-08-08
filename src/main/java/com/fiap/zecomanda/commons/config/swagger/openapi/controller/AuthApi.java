@@ -1,8 +1,8 @@
-package com.fiap.zecomanda.common.config.swagger.openapi.controller;
+package com.fiap.zecomanda.commons.config.swagger.openapi.controller;
 
-import com.fiap.zecomanda.dto.AuthenticationDTO;
-import com.fiap.zecomanda.dto.ChangePasswordDTO;
-import com.fiap.zecomanda.dto.RequestUserDTO;
+import com.fiap.zecomanda.dtos.AuthenticationDTO;
+import com.fiap.zecomanda.dtos.ChangePasswordDTO;
+import com.fiap.zecomanda.dtos.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +24,7 @@ public interface AuthApi {
     @PostMapping("/register")
     ResponseEntity<?> registerUser(
             @Parameter(description = "Dados do novo usuário", required = true)
-            @Valid RequestUserDTO data
+            @Valid UserDTO data
     );
 
     @Operation(summary = "Login de usuário", description = "Autentica o usuário e retorna um token JWT.")
