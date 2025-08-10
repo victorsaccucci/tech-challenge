@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,19 +16,15 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLogin(String login);
-
     Optional<User> findByEmail(String email);
-
-    Optional<User> findByLoginAndPassword(String login, String password);
 
     Page<User> findAll(Pageable pageable);
 
-
+    // HARD DELETE explícito para cliente apenas (retorna nº de linhas afetadas)
     @Modifying
     @Transactional
-    @Query("DELETE FROM User WHERE id = ?1")
-    Integer delete(Long id);
-
+    @Query("DELETE FROM User u WHERE u.id = :id")
+    int hardDeleteById(@Param("id") Long id);
 
     @Modifying
     @Transactional
