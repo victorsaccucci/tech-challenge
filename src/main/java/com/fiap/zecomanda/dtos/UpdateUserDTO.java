@@ -1,8 +1,8 @@
 package com.fiap.zecomanda.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateUserDTO(
@@ -15,6 +15,7 @@ public record UpdateUserDTO(
         String name,
 
         @Schema(example = "joao.silva@fiap.com")
+        @NotBlank @Email(message = "O e-mail informado não é válido")
         @NotBlank
         String email,
 

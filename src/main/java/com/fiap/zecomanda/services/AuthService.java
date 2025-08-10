@@ -1,5 +1,6 @@
 package com.fiap.zecomanda.services;
 
+import com.fiap.zecomanda.commons.exceptions.AccessDeniedException;
 import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
 import com.fiap.zecomanda.commons.security.TokenService;
 import com.fiap.zecomanda.dtos.*;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @Validated
@@ -26,6 +28,15 @@ public class AuthService {
     private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+
+    // Regra simples para segurança de senha ao trocar: mínimo 8, ao menos 1 letra e 1 número
+    private static final Pattern PWD_POLICY = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d).{8,}$");
+
+    private void ensurePasswordPolicy(String newPassword) {
+        if (newPassword == null || !PWD_POLICY.matcher(newPassword).matches()) {
+            throw new IllegalArgumentException("Password must be at least 8 characters and include letters and numbers.");
+        }
+    }
 
     public boolean resourceExists(String login, String email) {
         return userRepository.findByLogin(login).isPresent() || userRepository.findByEmail(email).isPresent();
@@ -64,7 +75,18 @@ public class AuthService {
             throw new IllegalArgumentException("Password confirmation does not match.");
         }
 
-        User user = extractUserSubject(tokenHeader).orElseThrow(() -> new IllegalArgumentException("User not found."));
+        ensurePasswordPolicy(passwordDTO.newPassword());
+
+        User user = extractUserSubject(tokenHeader)
+                .orElseThrow(() -> new UnauthorizedAccessException("Invalid login or password."));
+
+        if (!passwordEncoder.matches(passwordDTO.currentPassword(), user.getPassword())) {
+            throw new UnauthorizedAccessException("Invalid login or password.");
+        }
+
+        if (passwordEncoder.matches(passwordDTO.newPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("New password must be different from the current password.");
+        }
 
         user.setPassword(passwordEncoder.encode(passwordDTO.newPassword()));
         userRepository.save(user);
@@ -72,15 +94,22 @@ public class AuthService {
 
     public Optional<User> extractUserSubject(String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new RuntimeException("Invalid or missing token.");
+            throw new UnauthorizedAccessException("Invalid login or password.");
         }
 
         try {
             String token = tokenHeader.substring(7);
             String subjectLogin = tokenService.extractSubject(token);
-            return userRepository.findById(Long.valueOf(subjectLogin));
+            Optional<User> user = userRepository.findById(Long.valueOf(subjectLogin));
+
+            if (user.isEmpty()) {
+                throw new AccessDeniedException("Access is denied."); // 403
+            }
+            return user;
+        } catch (AccessDeniedException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Unable to authenticate user. Please log in again.");
+            throw new UnauthorizedAccessException("Invalid login or password."); // 401
         }
     }
 }

@@ -3,17 +3,24 @@ package com.fiap.zecomanda.services;
 import com.fiap.zecomanda.commons.config.swagger.openapi.dto.AddressDtoApi;
 import com.fiap.zecomanda.commons.config.swagger.openapi.dto.UserDtoApi;
 import com.fiap.zecomanda.commons.consts.UserType;
+import com.fiap.zecomanda.commons.exceptions.AccessDeniedException;
+import com.fiap.zecomanda.commons.exceptions.ResourceAlreadyExistsException;
+import com.fiap.zecomanda.commons.exceptions.ResourceNotFoundException;
 import com.fiap.zecomanda.commons.security.TokenService;
+import com.fiap.zecomanda.dtos.DeleteUserDTO;
 import com.fiap.zecomanda.dtos.UpdateUserDTO;
 import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.fiap.zecomanda.commons.consts.UserType.MANAGER;
 
 @Service
 @AllArgsConstructor
@@ -22,22 +29,43 @@ public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
 
-    public void updateUser(UpdateUserDTO user) {
-        var update = this.userRepository.updateUser(user.name(), user.email(), user.phoneNumber(), user.login(), user.id());
-        if (update == 0) {
-            throw new RuntimeException("User not found");
-        }
+    public void updateUser(UpdateUserDTO dto) {
+
+        // e-mail já usado por outro usuário
+        userRepository.findByEmail(dto.email())
+                .filter(u -> !u.getId().equals(dto.id()))
+                .ifPresent(u -> {
+                    throw new ResourceAlreadyExistsException("Email already exists.");
+                });
+
+        // login já usado por outro usuário
+        userRepository.findByLogin(dto.login())
+                .filter(u -> !u.getId().equals(dto.id()))
+                .ifPresent(u -> {
+                    throw new ResourceAlreadyExistsException("Login already exists.");
+                });
+
+        int updated = userRepository.updateUser(dto.name(), dto.email(), dto.phoneNumber(), dto.login(), dto.id());
+        if (updated == 0) throw new ResourceNotFoundException("User not found");
     }
 
-    public void delete(Long id) {
-        var userOptional = this.userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
+
+    @Transactional
+    public DeleteUserDTO delete(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // Regra: não deletar MANAGER
+        if (user.getUserType() == UserType.MANAGER) {
+            throw new AccessDeniedException("Managers cannot be deleted."); // 403
         }
-        var user = userOptional.get();
-        user.setDeleted(true);
-        var delete = this.userRepository.save(user);
-        System.out.println(""+ delete);
+
+        int rows = userRepository.hardDeleteById(id);
+        if (rows == 0) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        return new DeleteUserDTO(user.getId(), user.getName(), "deleted");
     }
 
     public List<UserDtoApi> findAllUsers() {
@@ -82,7 +110,7 @@ public class UserService {
     public boolean checkUserRoleAdmin(String authorizationHeader) {
         Optional<User> user = extractUserSubject(authorizationHeader);
 
-        if (user.isEmpty() || UserType.MANAGER != user.get().getUserType()) {
+        if (user.isEmpty() || MANAGER != user.get().getUserType()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied: Only managers can access this route.");
         }
 

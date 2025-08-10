@@ -2,20 +2,16 @@ package com.fiap.zecomanda.controllers;
 
 import com.fiap.zecomanda.commons.config.swagger.openapi.controller.UserApi;
 import com.fiap.zecomanda.commons.config.swagger.openapi.dto.UserDtoApi;
+import com.fiap.zecomanda.dtos.DeleteUserDTO;
 import com.fiap.zecomanda.dtos.UpdateUserDTO;
-import com.fiap.zecomanda.entities.User;
 import com.fiap.zecomanda.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -23,34 +19,26 @@ public class UserController implements UserApi {
 
     private final UserService userService;
 
+    @Override
     public ResponseEntity<?> getUsers(@RequestHeader("Authorization") String authorizationHeader) {
-        try {
-            //userService.checkUserRoleAdmin(authorizationHeader);
-            List<UserDtoApi> usuarios = userService.findAllUsers();
-            return ResponseEntity.ok(usuarios);
-
-        } catch (ResponseStatusException ex) {
-            Map<String, String> erro = new HashMap<>();
-            erro.put("error", ex.getReason());
-            return ResponseEntity.status(ex.getStatusCode()).body(erro);
-        }
+        // userService.checkUserRoleAdmin(authorizationHeader); // se for usar roles
+        List<UserDtoApi> usuarios = userService.findAllUsers();
+        return ResponseEntity.ok(usuarios);
     }
 
-    public ResponseEntity<Void> updateUser(
-            @RequestBody @Valid UpdateUserDTO user,
-            @RequestHeader("Authorization") String authorizationHeader
-    ) {
-        //Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
-        this.userService.updateUser(user);
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<Void> updateUser(@RequestBody @Valid UpdateUserDTO user,
+                                           @RequestHeader("Authorization") String authorizationHeader) {
+        userService.updateUser(user);
+        return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<Void> deleteUser(
+    @Override
+    public ResponseEntity<DeleteUserDTO> deleteUser(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long id
     ) {
-        //Optional<User> foundUser = userService.extractUserSubject(authorizationHeader);
-        this.userService.delete(id);
-        return ResponseEntity.ok().build();
+        var resp = userService.delete(id);
+        return ResponseEntity.ok(resp);
     }
 }

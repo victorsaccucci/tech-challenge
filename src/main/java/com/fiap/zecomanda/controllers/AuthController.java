@@ -32,18 +32,12 @@ public class AuthController implements AuthApi {
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<?> changePassword(
+    public ResponseEntity<Void> changePassword(
             @RequestBody @Valid ChangePasswordDTO passwordDTO,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        try {
-            authService.changePassword(passwordDTO, authorizationHeader);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        authService.changePassword(passwordDTO, authorizationHeader);
+        return ResponseEntity.noContent().build();
     }
 
 }
